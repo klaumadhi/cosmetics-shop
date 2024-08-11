@@ -16,7 +16,11 @@ export default function Header() {
         {/* <!-- navbar --> */}
         <nav className="flex top-0 left-0 right-0 justify-between bg-gray-900 text-white w-screen">
           <div className="pl-5 xl:px-12 lg:py-2 py-3 flex w-full items-center">
-            <Link className="text-3xl font-bold font-heading" to="/">
+            <Link
+              className="text-3xl font-bold font-heading"
+              to="/"
+              onClick={() => setSideBar(!sideBar)}
+            >
               <img className="h-12" src={Logo} alt="logo" />
             </Link>
             {/* <!-- Nav Links --> */}
@@ -218,10 +222,20 @@ export default function Header() {
                   <li>
                     <a
                       className="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
-                      href="#tc"
+                      href="https://www.instagram.com/diva_cos/"
+                      target="_blank"
                     >
                       <span className="select-none">Instagram</span>
                     </a>
+                  </li>
+                  <li>
+                    <Link
+                      onClick={() => setSideBar(!sideBar)}
+                      className="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+                      to="/admin"
+                    >
+                      <span className="select-none">Upload Products</span>
+                    </Link>
                   </li>
                 </ul>
               </div>

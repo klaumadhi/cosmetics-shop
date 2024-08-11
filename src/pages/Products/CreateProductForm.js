@@ -4,6 +4,7 @@ import Spinner from "../../ui/Spinner";
 import useCreateProduct from "../../hooks/useCreateProduct";
 import useCategories from "../../hooks/useCategories";
 import useGetCategoryIdByName from "../../hooks/useGetCategoryIdByName";
+import Button from "../../ui/Button";
 
 function CreateProductForm() {
   const { register, handleSubmit, formState } = useForm();
@@ -113,9 +114,9 @@ function CreateProductForm() {
           {...register("image", { required: "Image is required" })}
         />
       </div>
-      <button type="submit" disabled={isSubmitting}>
+      <Button type="submit" disabled={isSubmitting} className="mt-4">
         {isSubmitting ? "Creating..." : "Create Product"}
-      </button>
+      </Button>
     </form>
   );
 }
