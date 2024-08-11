@@ -19,7 +19,7 @@ export default function Header() {
             <Link
               className="text-3xl font-bold font-heading"
               to="/"
-              onClick={() => setSideBar(!sideBar)}
+              onClick={() => setSideBar(false)}
             >
               <img className="h-12" src={Logo} alt="logo" />
             </Link>
@@ -192,7 +192,7 @@ export default function Header() {
                   />
                 </div>
                 <h3 className="mb-2 text-xs font-medium uppercase text-gray-500">
-                  <Link onClick={() => setSideBar(!sideBar)} to="products">
+                  <Link onClick={() => setSideBar(false)} to="products">
                     Produktet
                   </Link>
                 </h3>
@@ -203,7 +203,7 @@ export default function Header() {
                         <Link
                           className="active flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600 "
                           to={`products/${category.name}`}
-                          onClick={() => setSideBar(!sideBar)}
+                          onClick={() => setSideBar(false)}
                         >
                           <span className="select-none">
                             {category.description}
