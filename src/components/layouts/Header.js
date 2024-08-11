@@ -22,41 +22,26 @@ export default function Header() {
             {/* <!-- Nav Links --> */}
             <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
               <li>
-                <a className="hover:text-gray-200" href="#">
+                <Link className="hover:text-gray-200" to="/">
                   Home
-                </a>
+                </Link>
               </li>
               <li className="relative group">
-                <a className="hover:text-gray-200" href="#">
+                <Link className="hover:text-gray-200" to="/products">
                   Category
-                </a>
+                </Link>
                 {/* <!-- Dropdown Menu --> */}
                 <ul className="absolute left-0 mt-2 w-48 bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <li>
-                    <a className="block px-4 py-2 hover:bg-gray-700" href="#">
-                      Item 1
-                    </a>
-                  </li>
-                  <li>
-                    <a className="block px-4 py-2 hover:bg-gray-700" href="#">
-                      Item 2
-                    </a>
-                  </li>
-                  <li>
-                    <a className="block px-4 py-2 hover:bg-gray-700" href="#">
-                      Item 3
-                    </a>
-                  </li>
-                  <li>
-                    <a className="block px-4 py-2 hover:bg-gray-700" href="#">
-                      Item 4
-                    </a>
-                  </li>
-                  <li>
-                    <a className="block px-4 py-2 hover:bg-gray-700" href="#">
-                      Item 5
-                    </a>
-                  </li>
+                  {categories?.data?.map((category) => (
+                    <li key={category.id}>
+                      <Link
+                        className="block px-4 py-2 hover:bg-gray-700"
+                        to={`/products/${category.name}`} // Optional: Use dynamic link based on category
+                      >
+                        {category.description}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </li>
               <li>
@@ -203,7 +188,9 @@ export default function Header() {
                   />
                 </div>
                 <h3 className="mb-2 text-xs font-medium uppercase text-gray-500">
-                  Produktet
+                  <Link onClick={() => setSideBar(!sideBar)} to="products">
+                    Produktet
+                  </Link>
                 </h3>
                 <ul className="mb-8 text-sm font-medium">
                   {categories?.data?.map((category) => {
