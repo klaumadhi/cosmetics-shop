@@ -1,16 +1,24 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function getProducts() {
-  const { data, error } = await supabase.from("products").select("*");
+export async function getProducts({ column, equals } = {}) {
+  let query = supabase
+    .from("products")
+    .select("*")
+    .order("id", { ascending: false });
+
+  // Apply the filter only if `column` and `equals` are defined
+  if (column && equals !== undefined) {
+    query = query.eq(column, equals);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("Can't get products");
   }
 
-  console.log(data);
-
-  return data;
+  return data; // Return the data to use it elsewhere
 }
 
 // API function to create a product
