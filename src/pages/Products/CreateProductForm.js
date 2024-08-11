@@ -11,7 +11,6 @@ function CreateProductForm() {
   const { isSubmitting } = formState;
   const { isCreating, createNewProduct } = useCreateProduct();
   const { categories } = useCategories();
-  const { category } = useGetCategoryIdByName();
 
   const onSubmit = async (data) => {
     console.log("Form Data:", data); // Add this line
