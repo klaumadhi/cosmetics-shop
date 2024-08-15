@@ -1,13 +1,33 @@
 import { useState, useEffect, useRef } from "react";
 import Logo from "../../assets/images/logo.png";
 import useCategories from "../../hooks/useCategories";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 
 export default function Header() {
   const [sideBar, setSideBar] = useState(false);
-  const sidebarRef = useRef(null);
 
+  const sidebarRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const navigate = useNavigate();
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (e) => {
+    e.preventDefault();
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchIconClick = () => {
+    if (!sideBar) {
+      setSideBar(true); // Open the sidebar
+    }
+    setTimeout(() => {
+      searchInputRef.current.focus(); // Focus the search input
+    }, 500); //match with sidebar animation duration
+  };
+
+  console.log(searchTerm);
   const { categories, error, isLoading } = useCategories();
 
   return (
@@ -61,7 +81,7 @@ export default function Header() {
             </ul>
             {/* <!-- Header Icons --> */}
             <div className="hidden xl:flex items-center space-x-5">
-              <a className="flex items-center hover:text-gray-200" href="#">
+              <a className="flex items-center hover:text-gray-200" href="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -86,8 +106,7 @@ export default function Header() {
           {/* <!-- Responsive navbar --> */}
           <a
             className="xl:hidden flex mr-6 items-center"
-            href="#"
-            onClick={!sideBar ? () => setSideBar(true) : null}
+            onClick={handleSearchIconClick}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -185,11 +204,17 @@ export default function Header() {
               <div className=" px-4 pb-6">
                 {/* <!-- Search Field --> */}
                 <div className="mb-6">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full px-4 py-1 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  />
+                  <form onSubmit={() => navigate(`search/${searchTerm}`)}>
+                    <input
+                      type="text"
+                      ref={searchInputRef}
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onBlur={() => setSearchTerm("")} // Clear the search term on blurq23
+                      onChange={handleSearchChange}
+                      className="w-full px-4 py-1 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    />
+                  </form>
                 </div>
                 <h3 className="mb-2 text-xs font-medium uppercase text-gray-500">
                   <Link onClick={() => setSideBar(false)} to="products">

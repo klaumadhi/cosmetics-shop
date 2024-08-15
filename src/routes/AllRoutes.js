@@ -15,7 +15,9 @@ export const AllRoutes = () => {
         <Route path="products" element={<ProductsList />} />
         {/* Dynamic Category Route */}
         <Route path="products/:category" element={<ProductsList />} />
+        <Route path="search/:searchTerm" element={<ProductsList />} />
         <Route path="product/:id" element={<ProductDetails />} />
+
         <Route path="cart" element={<CartPage />} />
         <Route path="admin" element={<Admin />} />
 

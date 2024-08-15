@@ -5,16 +5,22 @@ import Spinner from "../../ui/Spinner.js";
 import { useParams } from "react-router-dom";
 import { getCategoryIdByName } from "../../services/apiCategories.js";
 import useGetCategoryIdByName from "../../hooks/useGetCategoryIdByName.js";
+import useSearchProductsByName from "../../hooks/useSearchProductsByName.js";
 
 export default function ProductList() {
   const { category } = useParams();
+  const { searchTerm } = useParams();
+
+  const {
+    searchProducts,
+    isLoading: isLoading2,
+    error: error2,
+  } = useSearchProductsByName(searchTerm);
 
   console.log("useParams :", category);
   const { categoryId, isLoading1, error1 } = useGetCategoryIdByName({
     name: category, // Ensure you pass the correct name from useParams
   });
-
-  console.log("Category id from name:", categoryId);
 
   const { products, isLoading, error } = useProducts(
     categoryId
@@ -25,18 +31,24 @@ export default function ProductList() {
       : ""
   );
 
+  const productsToDisplay = searchTerm ? searchProducts : products;
+
   // console.log(products);
-  if (isLoading) {
+  if (isLoading || isLoading1 || isLoading2) {
     return <Spinner />;
   }
 
   return (
     <div className="my-5">
-      <h1 className="text-center text-4xl font-bold mb-5">
-        {category ? category : "All Products"}
-      </h1>
+      <h3 className="text-center text-2xl font-bold mb-5">
+        {searchTerm
+          ? `Search for: "${searchTerm}"`
+          : category
+          ? `Category of:${category}`
+          : "All Products"}
+      </h3>
       <div className="grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6  mx-4">
-        {products.map((product) => (
+        {productsToDisplay?.map((product) => (
           <ProductCard product={product} key={product.id} />
         ))}
       </div>

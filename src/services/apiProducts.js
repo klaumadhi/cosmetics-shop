@@ -53,3 +53,20 @@ export async function createProduct(newProduct) {
 
   return data;
 }
+
+export async function searchProductsByName(name) {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .ilike("name", `%${name}%`) // Use .ilike for case-insensitive search
+    .order("id", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    throw new Error("Can't search products");
+  }
+
+  console.log("Search products from apiProducts: " + data);
+
+  return data;
+}
