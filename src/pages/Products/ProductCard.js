@@ -20,7 +20,7 @@ export default function ProductCard({ product }) {
       <div className="relative aspect-square">
         {/* Discount percentage circle */}
         {discount_percentage > 0 && (
-          <div className="absolute z-10 top-2 left-2 flex items-center justify-center h-8 w-8 bg-pink-500 text-white text-xs font-bold rounded-full shadow-md">
+          <div className="absolute z-10 flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-pink-500 rounded-full shadow-md top-2 left-2">
             -{discount_percentage}%
           </div>
         )}
@@ -35,8 +35,8 @@ export default function ProductCard({ product }) {
         <p className="mb-1 text-xs text-gray-400">
           {brand.length >= 26 ? brand.slice(0, 26) + "..." : brand}
         </p>
-        <h3 className="mb-1 text-md font-medium text-gray-900">
-          {name.length >= 13 ? name.slice(0, 13) + "..." : name}
+        <h3 className="mb-1 font-medium text-gray-900 text-md">
+          {name.length >= 17 ? name.slice(0, 14) + "..." : name}
         </h3>
 
         <div className="flex items-center">
