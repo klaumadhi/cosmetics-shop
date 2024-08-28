@@ -84,7 +84,7 @@ export default function ProductDetails() {
                         onClick={() => handleVariationClick(variation)}
                         className={`px-4 py-2 border rounded-md text-sm font-medium ${
                           selectedVariation?.id === variation.id
-                            ? "bg-blue-600 text-white"
+                            ? "bg-pink-600 text-white"
                             : "bg-gray-200 text-gray-800"
                         }`}
                       >
@@ -96,28 +96,36 @@ export default function ProductDetails() {
               )}
 
               {product_variations[0]?.type === "color" && (
-                <>
-                  <p className="font-semibold text-gray-700 text-md">
-                    Select Color:
-                  </p>
-                  <div className="flex gap-2 mt-2">
-                    {product_variations.map((variation) => (
-                      <button
-                        key={variation.id}
-                        onClick={() => handleVariationClick(variation)}
-                        className={`w-8 h-8 rounded-full border-2 ${
-                          selectedVariation?.id === variation.id
-                            ? "border-blue-600"
-                            : "border-gray-300"
-                        }`}
-                        style={{
-                          backgroundImage: `url(${variation.color_image})`,
-                          backgroundSize: "cover",
-                        }}
-                      />
-                    ))}
+                <div>
+                  <div className="flex gap-4 my-5">
+                    <p className="my-auto font-semibold text-gray-700 text-md">
+                      Ngjyra:
+                    </p>
+                    <div className="flex inline gap-2 my-auto">
+                      {product_variations.map((variation) => (
+                        <button
+                          key={variation.id}
+                          onClick={() => handleVariationClick(variation)}
+                          className={`w-8 h-8 rounded-full border-1 ${
+                            selectedVariation?.id === variation.id
+                              ? "border-gray-500 outline-dashed"
+                              : "border-gray-300"
+                          }`}
+                          style={{
+                            backgroundImage: `url(${variation.color_image})`,
+                            backgroundSize: "cover",
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </>
+                  <p className="font-semibold text-gray-700 text-md">
+                    Nuanca: {"    "}
+                    <span className="font-bold uppercase">
+                      {selectedVariation?.color_name}
+                    </span>
+                  </p>
+                </div>
               )}
             </div>
           )}
@@ -140,8 +148,10 @@ export default function ProductDetails() {
           </div>
 
           {/* Barcode Display */}
-          <div className="mb-4">
-            <p className="font-semibold text-gray-700 text-md">Barcode:</p>
+          <div className="flex mb-4">
+            <p className="my-auto font-semibold text-gray-700 text-md">
+              Barcode: {"  "}
+            </p>
             <p className="text-lg text-gray-800">
               {selectedVariation?.barcode || product.barcode}
             </p>
