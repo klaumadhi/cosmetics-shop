@@ -40,14 +40,14 @@ export default function ProductList() {
 
   return (
     <div className="my-5">
-      <h3 className="text-center text-2xl font-bold mb-5">
+      <h3 className="mb-5 text-2xl font-bold text-center">
         {searchTerm
           ? `Search for: "${searchTerm}"`
           : category
           ? `Category of:${category}`
           : "All Products"}
       </h3>
-      <div className="grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6  mx-4">
+      <div className="grid gap-6 mx-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {productsToDisplay?.map((product) => (
           <ProductCard product={product} key={product.id} />
         ))}

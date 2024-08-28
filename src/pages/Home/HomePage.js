@@ -28,7 +28,7 @@ export default function HomePage() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2, // Show 4 products at a time
+    slidesToShow: 3, // Show 4 products at a time
     slidesToScroll: 1,
     autoplay: true,
     speed: 2000,
