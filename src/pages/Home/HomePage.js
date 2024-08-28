@@ -71,10 +71,7 @@ export default function HomePage() {
         <div className="flex items-center justify-center mx-5 bg-gray-50">
           <div className="w-full max-w-md px-6 py-8 text-center transition-all duration-300 transform bg-white rounded-lg shadow-md hover:scale-105 hover:shadow-lg">
             <h2 className="text-xl font-bold">Mirësevini në DIVA Cosmetics</h2>
-            <Button
-              className="mt-4 text-white bg-pink-800 border-pink-900 hover:border-pink-800 hover:bg-pink-700"
-              onClick={() => navigate("/products")}
-            >
+            <Button className="mt-4 " onClick={() => navigate("/products")}>
               Shiko produktet
             </Button>
           </div>

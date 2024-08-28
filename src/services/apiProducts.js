@@ -66,7 +66,5 @@ export async function searchProductsByName(name) {
     throw new Error("Can't search products");
   }
 
-  console.log("Search products from apiProducts: " + data);
-
   return data;
 }
