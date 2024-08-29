@@ -1,17 +1,22 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/logo.png";
 import useCategories from "../../hooks/useCategories";
-import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 
 export default function Header() {
   const [sideBar, setSideBar] = useState(false);
-
   const sidebarRef = useRef(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Get cart items from Redux store
+  const cartItems = useSelector((state) =>
+    state.cart.items.reduce((total, item) => total + item.quantity, 0)
+  );
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -24,18 +29,22 @@ export default function Header() {
     }
     setTimeout(() => {
       searchInputRef.current.focus(); // Focus the search input
-    }, 500); //match with sidebar animation duration
+    }, 500); // Match with sidebar animation duration
+  };
+
+  // Handle click on the cart icon
+  const handleCartIconClick = () => {
+    navigate("/cart"); // Navigate to the cart page
   };
 
   console.log(searchTerm);
   const { categories, error, isLoading } = useCategories();
 
   return (
-    <div className="flex flex-wrap fixed z-10">
-      <header className="relative mx-auto ">
-        {/* <!-- navbar --> */}
-        <nav className="flex top-0 left-0 right-0 justify-between bg-gray-900 text-white w-screen">
-          <div className="pl-5 xl:px-12 lg:py-2 py-3 flex w-full items-center">
+    <div className="fixed z-10 flex flex-wrap">
+      <header className="relative mx-auto">
+        <nav className="top-0 left-0 right-0 flex justify-between w-screen text-white bg-gray-900">
+          <div className="flex items-center w-full py-3 pl-5 xl:px-12 lg:py-2">
             <Link
               className="text-3xl font-bold font-heading"
               to="/"
@@ -43,8 +52,7 @@ export default function Header() {
             >
               <img className="h-12" src={Logo} alt="logo" />
             </Link>
-            {/* <!-- Nav Links --> */}
-            <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
+            <ul className="hidden px-4 mx-auto space-x-12 font-semibold md:flex font-heading">
               <li>
                 <Link className="hover:text-gray-200" to="/">
                   Home
@@ -54,13 +62,12 @@ export default function Header() {
                 <Link className="hover:text-gray-200" to="/products">
                   Category
                 </Link>
-                {/* <!-- Dropdown Menu --> */}
-                <ul className="absolute left-0 mt-2 w-48 bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <ul className="absolute left-0 w-48 mt-2 text-white transition-opacity duration-300 bg-gray-800 opacity-0 group-hover:opacity-100">
                   {categories?.data?.map((category) => (
                     <li key={category.id}>
                       <Link
                         className="block px-4 py-2 hover:bg-gray-700"
-                        to={`/products/${category.name}`} // Optional: Use dynamic link based on category
+                        to={`/products/${category.name}`}
                       >
                         {category.description}
                       </Link>
@@ -80,11 +87,15 @@ export default function Header() {
               </li>
             </ul>
             {/* <!-- Header Icons --> */}
-            <div className="hidden xl:flex items-center space-x-5">
-              <a className="flex items-center hover:text-gray-200" href="">
+            <div className="items-center hidden space-x-5 xl:flex">
+              <a
+                className="relative flex items-center hover:text-gray-200"
+                onClick={handleCartIconClick}
+                href="#"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
+                  className="w-6 h-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -96,21 +107,23 @@ export default function Header() {
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
-                <span className="flex absolute -mt-5 ml-4">
-                  <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-                </span>
+
+                {/* Cart Items Badge */}
+                {cartItems > 0 && (
+                  <span className="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-pink-500 rounded-full -top-2 -right-2">
+                    {cartItems}
+                  </span>
+                )}
               </a>
             </div>
           </div>
-          {/* <!-- Responsive navbar --> */}
           <a
-            className="xl:hidden flex mr-6 items-center"
+            className="flex items-center mr-6 xl:hidden"
             onClick={handleSearchIconClick}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 hover:text-gray-200"
+              className="w-6 h-6 hover:text-gray-200"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -123,11 +136,10 @@ export default function Header() {
               />
             </svg>
           </a>
-
-          <a className="xl:hidden flex mr-6 items-center" href="#">
+          <Link className="flex items-center mr-6 xl:hidden" to="cart">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 hover:text-gray-200"
+              className="w-6 h-6 hover:text-gray-200"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -139,20 +151,32 @@ export default function Header() {
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            <span className="flex absolute -mt-5 ml-4">
-              <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-            </span>
-          </a>
-          {/* <!--  Burger button --> */}
+
+            {cartItems === 0 && (
+              <span className="absolute flex ml-4 -mt-5">
+                {/* Blinking effect */}
+                <span className="relative flex w-3 h-3">
+                  <span className="absolute inline-flex w-full h-full bg-pink-400 rounded-full opacity-75 animate-ping"></span>
+                  <span className="relative inline-flex w-3 h-3 bg-pink-500 rounded-full"></span>
+                </span>
+              </span>
+            )}
+            {cartItems > 0 && (
+              <span className="absolute flex ml-4 -mt-5">
+                <span className="relative flex items-center justify-center w-4 h-4 my-auto text-xs text-white bg-pink-500 rounded-full">
+                  {cartItems}
+                </span>
+              </span>
+            )}
+          </Link>
           <a
-            className="navbar-burger self-center mr-6 md:hidden"
+            className="self-center mr-6 navbar-burger md:hidden"
             onClick={() => setSideBar(!sideBar)}
           >
             {sideBar ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 hover:text-gray-200"
+                className="w-6 h-6 hover:text-gray-200"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -167,7 +191,7 @@ export default function Header() {
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 hover:text-gray-200"
+                className="w-6 h-6 hover:text-gray-200"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -194,14 +218,14 @@ export default function Header() {
             pointerEvents: sideBar ? "auto" : "none",
           }}
         >
-          <div className="navbar-menu z-50 h-full">
+          <div className="z-50 h-full navbar-menu">
             <nav
               id="sidebar"
-              className="flex w-full h-full lg:h-fit flex-col overflow-y-auto bg-gray-900 pt-8  transition-transform duration-500 ease-in-out"
+              className="flex flex-col w-full h-full pt-8 overflow-y-auto transition-transform duration-500 ease-in-out bg-gray-900 lg:h-fit"
             >
               {/* Sidebar Content */}
 
-              <div className=" px-4 pb-6">
+              <div className="px-4 pb-6 ">
                 {/* <!-- Search Field --> */}
                 <div className="mb-6">
                   <form onSubmit={() => navigate(`search/${searchTerm}`)}>
@@ -212,11 +236,11 @@ export default function Header() {
                       value={searchTerm}
                       onBlur={() => setSearchTerm("")} // Clear the search term on blurq23
                       onChange={handleSearchChange}
-                      className="w-full px-4 py-1 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      className="w-full px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500"
                     />
                   </form>
                 </div>
-                <h3 className="mb-2 text-xs font-medium uppercase text-gray-500">
+                <h3 className="mb-2 text-xs font-medium text-gray-500 uppercase">
                   <Link onClick={() => setSideBar(false)} to="products">
                     Produktet
                   </Link>
@@ -226,7 +250,7 @@ export default function Header() {
                     return (
                       <li key={category.id}>
                         <Link
-                          className="active flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600 "
+                          className="flex items-center py-3 pl-3 pr-4 rounded active text-gray-50 hover:bg-gray-600 "
                           to={`products/${category.name}`}
                           onClick={() => setSideBar(false)}
                         >
@@ -240,13 +264,13 @@ export default function Header() {
                 </ul>
               </div>
               <div className="px-4 pb-6">
-                <h3 className="mb-2 text-xs font-medium uppercase text-gray-500">
+                <h3 className="mb-2 text-xs font-medium text-gray-500 uppercase">
                   Kontakt
                 </h3>
                 <ul className="mb-8 text-sm font-medium">
                   <li>
                     <a
-                      className="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+                      className="flex items-center py-3 pl-3 pr-4 rounded text-gray-50 hover:bg-gray-600"
                       href="https://www.instagram.com/diva_cos/"
                       target="_blank"
                     >
@@ -256,7 +280,7 @@ export default function Header() {
                   <li>
                     <Link
                       onClick={() => setSideBar(!sideBar)}
-                      className="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+                      className="flex items-center py-3 pl-3 pr-4 rounded text-gray-50 hover:bg-gray-600"
                       to="/admin"
                     >
                       <span className="select-none">Upload Products</span>

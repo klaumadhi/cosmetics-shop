@@ -4,8 +4,11 @@ import useProducts from "../../hooks/useProducts.js";
 import Spinner from "../../ui/Spinner.js";
 import useGetVariationsFromProductId from "../../hooks/useGetVariationsFromProductId.js";
 import Button from "../../ui/Button.js";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "../../store/cartSlice.js";
 
 export default function ProductDetails() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const { products, isLoading, error } = useProducts({
     column: "id",
@@ -68,6 +71,19 @@ export default function ProductDetails() {
   const descriptionToShow = showFullDescription
     ? product.description
     : truncateText(product.description, 40);
+
+  const handleAddToCart = () => {
+    const item = {
+      id: selectedVariation?.id || product.id,
+      name: product.name,
+      price: currentPrice,
+      quantity,
+      variation: selectedVariation,
+    };
+
+    dispatch(addItemToCart(item));
+    console.log(item);
+  };
 
   return (
     <div className="container px-4 mx-auto my-10">
@@ -138,7 +154,7 @@ export default function ProductDetails() {
                   <p className="font-semibold text-gray-700 text-md">
                     Nuanca: {"    "}
                     <span className="font-bold uppercase">
-                      {selectedVariation?.color_name}
+                      {selectedVariation?.value}
                     </span>
                   </p>
                 </div>
@@ -203,7 +219,9 @@ export default function ProductDetails() {
             </button>
           )}
 
-          <Button className="mt-6">Add {quantity} to Cart</Button>
+          <Button className="mt-6" onClick={handleAddToCart}>
+            Add {quantity} to Cart
+          </Button>
         </div>
       </div>
     </div>

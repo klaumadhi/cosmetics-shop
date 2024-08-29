@@ -6,26 +6,22 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ScrollToTop } from "./utilis/ScrollToTop";
 import { ToastContainer } from "react-toastify";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // staleTime: 60*1000,
-      staleTime: 0,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <ToastContainer />
-        <ScrollToTop />
-
-        <App />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <ToastContainer />
+          <ScrollToTop />
+          <App />
+        </BrowserRouter>
+      </Provider>
     </QueryClientProvider>
   </React.StrictMode>
 );

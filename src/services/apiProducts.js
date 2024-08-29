@@ -159,7 +159,6 @@ export async function createProductWithDifferentSize(productData) {
           barcode: variation.barcode,
           price: variation.price,
           color_image: variation.color_image || null, // Only if you are using color variations
-          color_name: variation.color_name || null, // Only if you are using color variations
         });
 
       if (variationInsertError) {
@@ -230,7 +229,7 @@ export async function createProductWithDifferentColors(productData) {
     for (const colorVariation of productData.colorVariations) {
       if (!colorVariation.color_image || !colorVariation.color_image[0]) {
         throw new Error(
-          `Image for color variation ${colorVariation.color_name} is missing`
+          `Image for color variation ${colorVariation.value} is missing`
         );
       }
 
@@ -239,22 +238,19 @@ export async function createProductWithDifferentColors(productData) {
         !colorVariation.variation_image[0]
       ) {
         throw new Error(
-          `Variation image for color variation ${colorVariation.color_name} is missing`
+          `Variation image for color variation ${colorVariation.value} is missing`
         );
       }
 
       const colorImageFile = colorVariation.color_image[0];
       const colorImageName = `${
         productData?.id
-      }-${colorVariation.color_name.replaceAll(" ", "")}-color-${uniqueSuffix}`;
+      }-${colorVariation.value.replaceAll(" ", "")}-color-${uniqueSuffix}`;
 
       const variationImageFile = colorVariation.variation_image[0];
       const variationImageName = `${
         productData?.ud
-      }-${colorVariation.color_name.replaceAll(
-        " ",
-        ""
-      )}-variation-${uniqueSuffix}`;
+      }-${colorVariation.value.replaceAll(" ", "")}-variation-${uniqueSuffix}`;
 
       // Upload the color variation image
       const { error: colorImageError } = await supabase.storage
@@ -296,7 +292,7 @@ export async function createProductWithDifferentColors(productData) {
           barcode: colorVariation.barcode,
           price: colorVariation.price,
           color_image: colorImagePath,
-          color_name: colorVariation.color_name,
+
           variation_image: variationImagePath,
         });
 

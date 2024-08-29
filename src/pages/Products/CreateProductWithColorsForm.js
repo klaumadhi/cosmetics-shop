@@ -191,15 +191,15 @@ function CreateProductWithColorsForm() {
             <div className="flex items-center mb-4">
               <label
                 className="block pr-4 font-bold text-gray-500"
-                htmlFor={`colorVariations[${index}].color_name`}
+                htmlFor={`colorVariations[${index}].value`}
               >
                 Color Name
               </label>
               <input
                 className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
                 type="text"
-                id={`colorVariations[${index}].color_name`}
-                {...register(`colorVariations[${index}].color_name`, {
+                id={`colorVariations[${index}].value`}
+                {...register(`colorVariations[${index}].value`, {
                   required: "Color Name is required",
                 })}
               />
