@@ -13,6 +13,7 @@ import ProductCard from "../Products/ProductCard";
 // Ensure these imports for slick carousel styles
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Spinner from "../../ui/Spinner";
 
 export default function HomePage() {
   const { products, isLoading, error } = useProducts({
@@ -56,7 +57,7 @@ export default function HomePage() {
     ],
   };
 
-  if (isLoading) return <p>Loading products...</p>;
+  if (isLoading) return <Spinner />;
   if (error) return <p>Error loading products: {error.message}</p>;
 
   return (
