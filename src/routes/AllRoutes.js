@@ -6,6 +6,9 @@ import CartPage from "../pages/Cart/CartPage";
 import { PageNotFound } from "../pages/PageNotFound";
 
 import Admin from "../pages/Admin/Admin";
+import CreateProductForm from "../pages/Products/CreateProductForm";
+import CreateProductWithSizesForm from "../pages/Products/CreateProductWithSizesForm";
+import CreateProductWithColorsForm from "../pages/Products/CreateProductWithColorsForm";
 
 export const AllRoutes = () => {
   return (
@@ -19,7 +22,17 @@ export const AllRoutes = () => {
         <Route path="product/:id" element={<ProductDetails />} />
 
         <Route path="cart" element={<CartPage />} />
+
         <Route path="admin" element={<Admin />} />
+        <Route path="admin/createProduct" element={<CreateProductForm />} />
+        <Route
+          path="admin/CreateProductWithSizesForm"
+          element={<CreateProductWithSizesForm />}
+        />
+        <Route
+          path="admin/CreateProductWithColorsForm"
+          element={<CreateProductWithColorsForm />}
+        />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

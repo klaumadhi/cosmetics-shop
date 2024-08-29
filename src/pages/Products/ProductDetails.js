@@ -102,7 +102,7 @@ export default function ProductDetails() {
                       Ngjyra:
                     </p>
                     <div className="flex inline gap-2 my-auto">
-                      {product_variations.map((variation) => (
+                      {product_variations?.map((variation) => (
                         <button
                           key={variation.id}
                           onClick={() => handleVariationClick(variation)}

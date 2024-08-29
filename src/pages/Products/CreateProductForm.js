@@ -3,23 +3,53 @@ import { useForm } from "react-hook-form";
 import Spinner from "../../ui/Spinner";
 import useCreateProduct from "../../hooks/useCreateProduct";
 import useCategories from "../../hooks/useCategories";
-import useGetCategoryIdByName from "../../hooks/useGetCategoryIdByName";
+
 import Button from "../../ui/Button";
+import { toast, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateProductForm() {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState, reset } = useForm();
   const { isSubmitting } = formState;
   const { isCreating, createNewProduct } = useCreateProduct();
   const { categories } = useCategories();
 
   const onSubmit = async (data) => {
-    console.log("Form Data:", data); // Add this line
     try {
-      createNewProduct(data);
-      // Handle successful creation (e.g., show a success message, reset form)
+      createNewProduct(data, {
+        onSuccess: () => {
+          console.log("Product created successfully!");
+          toast.success("Product created successfully!", {
+            position: "top-center",
+            autoClose: 599,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Flip,
+          });
+
+          reset(); // Reset the form after successful submission
+        },
+        onError: (error) => {
+          toast.error("Failed to create product. Please try again.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Flip,
+          });
+        },
+      });
+      // Show success message
     } catch (error) {
       console.error("Error creating product:", error);
-      // Handle error (e.g., show an error message)
     }
   };
 
@@ -32,13 +62,13 @@ function CreateProductForm() {
       <div className="w-full max-w-sm mt-5">
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="name"
           >
             Product Name
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="text"
             id="name"
             {...register("name", { required: "Name is required" })}
@@ -46,13 +76,13 @@ function CreateProductForm() {
         </div>
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="brand"
           >
             Brand
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="text"
             id="brand"
             {...register("brand", { required: "Brand is required" })}
@@ -61,7 +91,7 @@ function CreateProductForm() {
 
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="category_id"
           >
             Category
@@ -80,13 +110,13 @@ function CreateProductForm() {
         </div>
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="description"
           >
             Description
           </label>
           <textarea
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             id="description"
             {...register("description", {
               required: "Description is required",
@@ -95,13 +125,13 @@ function CreateProductForm() {
         </div>
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="price"
           >
             Price
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="number"
             id="price"
             {...register("price", { required: "Price is required" })}
@@ -109,13 +139,13 @@ function CreateProductForm() {
         </div>
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="stock_quantity"
           >
             Stock Quantity
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="number"
             id="stock_quantity"
             {...register("stock_quantity", {
@@ -125,13 +155,13 @@ function CreateProductForm() {
         </div>
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="discount_percentage"
           >
             Discount Percentage
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="number"
             id="discount_percentage"
             {...register("discount_percentage", {
@@ -142,13 +172,13 @@ function CreateProductForm() {
 
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="barcode"
           >
             Barcode
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="text"
             id="barcode"
             {...register("barcode", { required: "Barcode is required" })}
@@ -157,13 +187,13 @@ function CreateProductForm() {
 
         <div className="flex items-center mb-6">
           <label
-            className="block text-gray-500 font-bold text-right mb-1 md:mb-0 pr-4"
+            className="block pr-4 mb-1 font-bold text-right text-gray-500 md:mb-0"
             htmlFor="image"
           >
             Product Image
           </label>
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-purple-500"
             type="file"
             id="image"
             {...register("image", { required: "Image is required" })}
