@@ -29,29 +29,29 @@ export default function HomePage() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3, // Show 4 products at a time
+    slidesToShow: 5, // Show 5 products at a time
     slidesToScroll: 1,
     autoplay: true,
-    speed: 2000,
+    speed: 1000,
     autoplaySpeed: 3000,
 
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
         },
       },
     ],
@@ -79,11 +79,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="pl-3 mb-10">
-        <h2 className="m-auto my-3 text-xl font-bold text-center">
+      <section className="mb-10">
+        <h2 className="my-3 text-xl font-semibold text-center">
           Produktet me te reja
         </h2>
-        <div className="container ">
+        <div className="container mx-auto overflow-hidden">
           {products.length > 0 ? (
             <Slider {...settings}>
               {products.map((product) => (
@@ -93,7 +93,7 @@ export default function HomePage() {
               ))}
             </Slider>
           ) : (
-            <p>No products found.</p>
+            <p className="text-center">No products found.</p>
           )}
         </div>
       </section>
