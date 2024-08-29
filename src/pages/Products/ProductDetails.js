@@ -19,6 +19,7 @@ export default function ProductDetails() {
     product_variations?.length > 0 ? product_variations[0] : null
   );
   const [quantity, setQuantity] = useState(1);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   // Update the selected variation when product variations change
   useEffect(() => {
@@ -53,6 +54,21 @@ export default function ProductDetails() {
     setQuantity((prevQuantity) => Math.max(1, prevQuantity + increment));
   };
 
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
+  const truncateText = (text, wordLimit) => {
+    const words = text.split(" ");
+    return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ") + "..."
+      : text;
+  };
+
+  const descriptionToShow = showFullDescription
+    ? product.description
+    : truncateText(product.description, 40);
+
   return (
     <div className="container px-4 mx-auto my-10">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -64,10 +80,10 @@ export default function ProductDetails() {
           />
         </div>
         <div className="flex flex-col justify-center">
+          <p className="mb-2 text-lg text-gray-500">{product.brand}</p>
           <h1 className="mb-4 text-3xl font-bold text-gray-900">
             {product.name}
           </h1>
-          <p className="mb-2 text-lg text-gray-500">{product.brand}</p>
 
           {/* Render Variations Section Conditionally */}
           {product_variations?.length > 0 && (
@@ -174,10 +190,20 @@ export default function ProductDetails() {
             </button>
           </div>
 
+          {/* Description Section */}
           <p className="leading-relaxed text-gray-700 text-md">
-            {product.description}
+            {descriptionToShow}
           </p>
-          <Button>Add {quantity} to Cart</Button>
+          {product.description.split(" ").length > 40 && (
+            <button
+              onClick={toggleDescription}
+              className="flex mt-2 font-semibold text-pink-600"
+            >
+              {showFullDescription ? "Show Less" : "Show More"}
+            </button>
+          )}
+
+          <Button className="mt-6">Add {quantity} to Cart</Button>
         </div>
       </div>
     </div>

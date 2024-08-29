@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ScrollToTop } from "../../utilis/ScrollToTop";
 
 export default function ProductCard({ product }) {
   const {
@@ -20,7 +19,7 @@ export default function ProductCard({ product }) {
 
   return (
     <Link to={`/product/${id}`}>
-      <div className="mx-auto  max-w-[300px] transform overflow-hidden rounded-lg bg-white :bg-slate-800 shadow-md duration-300 hover:scale-105 hover:shadow-lg">
+      <div className="mx-auto max-w-[300px] transform overflow-hidden rounded-lg bg-white shadow-md duration-300 hover:scale-105 hover:shadow-lg">
         <div className="relative aspect-square">
           {/* Discount percentage circle */}
           {discount_percentage > 0 && (
@@ -28,19 +27,17 @@ export default function ProductCard({ product }) {
               -{discount_percentage}%
             </div>
           )}
-          {/*Product image */}
+          {/* Product image */}
           <img
-            className=" aspect-square w-fill"
+            className="aspect-square w-fill"
             src={image}
             alt="Product Image"
           />
         </div>
         <div className="p-2">
-          <p className="mb-1 text-xs text-gray-400">
-            {brand.length >= 26 ? brand.slice(0, 26) + "..." : brand}
-          </p>
-          <h3 className="mb-1 font-medium text-gray-900 text-md">
-            {name.length >= 17 ? name.slice(0, 14) + "..." : name}
+          <p className="mb-1 text-xs text-gray-400 truncate-2-lines">{brand}</p>
+          <h3 className="mb-1 font-medium text-gray-900 text-md truncate-2-lines">
+            {name}
           </h3>
 
           <div className="flex items-center">

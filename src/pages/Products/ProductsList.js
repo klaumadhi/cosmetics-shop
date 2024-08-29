@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { getCategoryIdByName } from "../../services/apiCategories.js";
 import useGetCategoryIdByName from "../../hooks/useGetCategoryIdByName.js";
 import useSearchProductsByName from "../../hooks/useSearchProductsByName.js";
+import NoResultFound from "../NoResultFound.js";
 
 export default function ProductList() {
   const { category } = useParams();
@@ -40,13 +41,16 @@ export default function ProductList() {
 
   return (
     <div className="my-5">
-      <h3 className="mb-5 text-2xl font-bold text-center">
+      <h3 className="mb-5 text-xl font-semibold text-center text-slate-800 ">
         {searchTerm
           ? `Search for: "${searchTerm}"`
           : category
           ? `Category of:${category}`
           : "All Products"}
       </h3>
+      {productsToDisplay.length < 1 && (
+        <NoResultFound searchTerm={searchTerm} />
+      )}
       <div className="grid gap-6 mx-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {productsToDisplay?.map((product) => (
           <ProductCard product={product} key={product.id} />
