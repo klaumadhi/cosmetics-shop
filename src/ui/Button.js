@@ -13,7 +13,7 @@ const Button = React.forwardRef(
     ref
   ) => {
     const baseClass =
-      "bg-pink-700 hover:bg-pink-400 text-white font-bold py-2 px-4 border-b-4 border-pink-950 hover:border-pink-500 rounded";
+      "bg-pink-700  text-white font-bold py-2 px-4 border-b-4 border-pink-950  rounded";
 
     return (
       <button

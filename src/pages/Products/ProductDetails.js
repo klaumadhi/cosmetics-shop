@@ -6,6 +6,7 @@ import useGetVariationsFromProductId from "../../hooks/useGetVariationsFromProdu
 import Button from "../../ui/Button.js";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../store/cartSlice.js";
+import Popup from "../../ui/Popup.js";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export default function ProductDetails() {
   );
   const [quantity, setQuantity] = useState(1);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   // Update the selected variation when product variations change
   useEffect(() => {
@@ -82,7 +84,7 @@ export default function ProductDetails() {
     };
 
     dispatch(addItemToCart(item));
-    console.log(item);
+    setShowPopup(true);
   };
 
   return (
@@ -224,6 +226,7 @@ export default function ProductDetails() {
           </Button>
         </div>
       </div>
+      {showPopup && <Popup onClose={() => setShowPopup(false)} />}
     </div>
   );
 }

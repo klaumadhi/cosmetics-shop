@@ -208,13 +208,24 @@ export default function Header() {
         </nav>
 
         {/* <!-- Sidebar start--> */}
+
+        <div
+          className={`fixed inset-0 z-40 transition-opacity duration-300 ease-in-out ${
+            sideBar ? "opacity-70 delay-500" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => setSideBar(false)}
+        >
+          <div className="absolute inset-y-0 right-0 w-1/4 mt-[72px] bg-black bg-opacity-50 backdrop-blur-sm"></div>
+        </div>
+
         <div
           id="containerSidebar"
           ref={sidebarRef}
-          className={`fixed z-50 transition-transform duration-500 ease-in-out h-full  md:hidden
-    ${!sideBar ? "-translate-x-full" : "translate-x-0"}`}
+          className={`fixed z-50 transition-transform duration-500 ease-in-out h-full mt-[71px] w-3/4 md:hidden ${
+            !sideBar ? "-translate-x-full" : "translate-x-0"
+          }`}
           style={{
-            width: sideBar ? "70%" : "0",
+            top: "0", // Ensure this aligns with your header
             pointerEvents: sideBar ? "auto" : "none",
           }}
         >
@@ -224,8 +235,7 @@ export default function Header() {
               className="flex flex-col w-full h-full pt-8 overflow-y-auto transition-transform duration-500 ease-in-out bg-gray-900 lg:h-fit"
             >
               {/* Sidebar Content */}
-
-              <div className="px-4 pb-6 ">
+              <div className="px-4 pb-6">
                 {/* <!-- Search Field --> */}
                 <div className="mb-6">
                   <form onSubmit={() => navigate(`search/${searchTerm}`)}>
@@ -234,7 +244,7 @@ export default function Header() {
                       ref={searchInputRef}
                       placeholder="Search..."
                       value={searchTerm}
-                      onBlur={() => setSearchTerm("")} // Clear the search term on blurq23
+                      onBlur={() => setSearchTerm("")}
                       onChange={handleSearchChange}
                       className="w-full px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500"
                     />
@@ -250,7 +260,7 @@ export default function Header() {
                     return (
                       <li key={category.id}>
                         <Link
-                          className="flex items-center py-3 pl-3 pr-4 rounded active text-gray-50 hover:bg-gray-600 "
+                          className="flex items-center py-3 pl-3 pr-4 rounded active text-gray-50 hover:bg-gray-600"
                           to={`products/${category.name}`}
                           onClick={() => setSideBar(false)}
                         >
@@ -291,6 +301,7 @@ export default function Header() {
             </nav>
           </div>
         </div>
+
         {/* <!-- Sidebar end --> */}
       </header>
     </div>
