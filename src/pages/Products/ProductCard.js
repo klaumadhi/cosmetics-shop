@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import { formatNumber } from "../../utilis/helpers";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, newProduct = false }) {
   const {
     id,
     brand,
@@ -22,6 +23,11 @@ export default function ProductCard({ product }) {
       <div className="mx-auto max-w-[300px] transform overflow-hidden rounded-lg bg-white shadow-md duration-300 hover:scale-105 hover:shadow-lg">
         <div className="relative aspect-square">
           {/* Discount percentage circle */}
+          {newProduct && (
+            <div className="absolute z-10 flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-pink-500 rounded-full shadow-md top-2 left-2">
+              New
+            </div>
+          )}
           {discount_percentage > 0 && (
             <div className="absolute z-10 flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-pink-500 rounded-full shadow-md top-2 left-2">
               -{discount_percentage}%
@@ -46,13 +52,13 @@ export default function ProductCard({ product }) {
                 discount_percentage > 0 ? "text-red-600" : ""
               } text-gray-900`}
             >
-              {currentPrice}
-              <span className="text-[15px]">Leke</span>
+              {formatNumber(currentPrice)}
+              <span className="text-[15px]">L</span>
             </p>
             {discount_percentage > 0 && (
               <>
                 <p className="text-base font-medium text-gray-500 line-through">
-                  {originalPrice}
+                  {formatNumber(originalPrice)}
                 </p>
                 <span className="text-[10px] no-underline">Leke</span>
               </>

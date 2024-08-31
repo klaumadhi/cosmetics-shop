@@ -1,12 +1,17 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function getProducts({ column, equals } = {}) {
+export async function getProducts({ column, equals } = {}, limit = null) {
   let query = supabase
     .from("products")
     .select("*")
-    .order("id", { ascending: false });
+    .order("id", { ascending: false })
+    .limit(limit);
 
   // Apply the filter only if `column` and `equals` are defined
+  if (column && equals !== undefined) {
+    query = query.eq(column, equals);
+  }
+
   if (column && equals !== undefined) {
     query = query.eq(column, equals);
   }
@@ -58,7 +63,7 @@ export async function searchProductsByName(name) {
   const { data, error } = await supabase
     .from("products")
     .select("*")
-    .ilike("name", `%${name}%`) // Use .ilike for case-insensitive search
+    .or(`name.ilike.%${name}%,brand.ilike.%${name}%`) // Checks both name and brand for the search term
     .order("id", { ascending: false });
 
   if (error) {

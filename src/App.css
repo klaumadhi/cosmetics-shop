@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer utilities {
   .truncate-2-lines {
     display: -webkit-box;

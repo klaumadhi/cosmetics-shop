@@ -49,3 +49,12 @@ function cropImageToSquare(imageFile) {
     reader.readAsDataURL(imageFile);
   });
 }
+
+export function formatNumber(value) {
+  // Ensure the value is a number
+  const number = Number(value);
+  if (isNaN(number)) return value;
+
+  // Convert to string and use regular expression to add commas
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

@@ -4,12 +4,51 @@ import { removeItemFromCart, clearCart } from "../../store/cartSlice";
 import Button from "../../ui/Button";
 import { useNavigate } from "react-router-dom";
 import EmptyCart from "../../assets/images/empty-cart.png";
+import useProducts from "../../hooks/useProducts";
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import ProductCard from "../Products/ProductCard";
 
 export default function CartPage() {
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
+  const { products, isLoading, error } = useProducts({}, 6);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5, // Show 5 products at a time
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 1000,
+    autoplaySpeed: 3000,
+
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
+  };
 
   return (
     <div className="container max-w-3xl px-6 py-10 mx-auto bg-white rounded-lg shadow-md">
@@ -35,28 +74,20 @@ export default function CartPage() {
           </Button>
           <div className="mt-10">
             <h2 className="mb-4 text-xl font-bold text-gray-800">
-              Popular Products
+              Produktet me te reja
             </h2>
-            <div className="grid grid-cols-2 gap-4">
-              {/* Example products, replace with dynamic data if available */}
-              <div className="p-4 bg-gray-100 rounded-lg">
-                <img
-                  src="/images/product-1.jpg" // Replace with actual product image path
-                  alt="Product 1"
-                  className="object-cover w-full h-32 mb-2 rounded-lg"
-                />
-                <p className="text-gray-800">Product 1</p>
-                <p className="text-sm text-gray-600">Price: 100 Leke</p>
-              </div>
-              <div className="p-4 bg-gray-100 rounded-lg">
-                <img
-                  src="/images/product-2.jpg" // Replace with actual product image path
-                  alt="Product 2"
-                  className="object-cover w-full h-32 mb-2 rounded-lg"
-                />
-                <p className="text-gray-800">Product 2</p>
-                <p className="text-sm text-gray-600">Price: 150 Leke</p>
-              </div>
+            <div className="container mx-auto overflow-hidden">
+              {products.length > 0 ? (
+                <Slider {...settings}>
+                  {products?.map((product) => (
+                    <div key={product.id} className="p-2">
+                      <ProductCard product={product} newProduct={true} />
+                    </div>
+                  ))}
+                </Slider>
+              ) : (
+                <p className="text-center">No products found.</p>
+              )}
             </div>
           </div>
         </div>
@@ -72,6 +103,7 @@ export default function CartPage() {
                   <p className="text-lg font-semibold text-gray-800">
                     {item.name}
                   </p>
+
                   <p className="text-gray-600">
                     {item.quantity} x {item.price} Leke
                   </p>

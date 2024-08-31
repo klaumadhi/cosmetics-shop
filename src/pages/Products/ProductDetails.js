@@ -7,6 +7,8 @@ import Button from "../../ui/Button.js";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../store/cartSlice.js";
 import Popup from "../../ui/Popup.js";
+import { formatNumber } from "../../utilis/helpers.js";
+import { Link } from "react-router-dom";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -98,7 +100,12 @@ export default function ProductDetails() {
           />
         </div>
         <div className="flex flex-col justify-center">
-          <p className="mb-2 text-lg text-gray-500">{product.brand}</p>
+          <Link
+            to={`/search/${product.brand}`}
+            className="mb-2 text-lg text-gray-500"
+          >
+            {product.brand}
+          </Link>
           <h1 className="mb-4 text-3xl font-bold text-gray-900">
             {product.name}
           </h1>
@@ -167,7 +174,7 @@ export default function ProductDetails() {
           {/* Price and Discount Section */}
           <div className="flex items-center mb-6">
             <span className="text-2xl font-semibold text-gray-800">
-              {currentPrice} Leke
+              Lek {formatNumber(currentPrice)}
             </span>
             {product.discount_percentage > 0 && (
               <>
@@ -175,7 +182,7 @@ export default function ProductDetails() {
                   {product.discount_percentage}% OFF
                 </span>
                 <span className="ml-4 text-lg text-gray-500 line-through">
-                  {variationPrice} Leke
+                  {formatNumber(variationPrice)} Leke
                 </span>
               </>
             )}
@@ -192,20 +199,25 @@ export default function ProductDetails() {
           </div>
 
           {/* Quantity Selector */}
-          <div className="flex items-center mb-6">
-            <button
-              onClick={() => handleQuantityChange(-1)}
-              className="px-3 py-2 bg-gray-200 rounded-md"
-            >
-              -
-            </button>
-            <span className="px-4 text-xl">{quantity}</span>
-            <button
-              onClick={() => handleQuantityChange(1)}
-              className="px-3 py-2 bg-gray-200 rounded-md"
-            >
-              +
-            </button>
+          <div className="flex items-center gap-10 mb-6">
+            <div className="flex items-center">
+              <button
+                onClick={() => handleQuantityChange(-1)}
+                className="px-3 py-2 bg-gray-200 rounded-md"
+              >
+                -
+              </button>
+              <span className="px-4 text-xl">{quantity}</span>
+              <button
+                onClick={() => handleQuantityChange(1)}
+                className="px-3 py-2 bg-gray-200 rounded-md"
+              >
+                +
+              </button>
+            </div>
+            <Button className="" onClick={handleAddToCart}>
+              Add {quantity} to Cart
+            </Button>
           </div>
 
           {/* Description Section */}
@@ -220,10 +232,6 @@ export default function ProductDetails() {
               {showFullDescription ? "Show Less" : "Show More"}
             </button>
           )}
-
-          <Button className="mt-6" onClick={handleAddToCart}>
-            Add {quantity} to Cart
-          </Button>
         </div>
       </div>
       {showPopup && <Popup onClose={() => setShowPopup(false)} />}
