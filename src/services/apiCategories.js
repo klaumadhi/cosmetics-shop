@@ -14,7 +14,7 @@ export async function getCategories() {
 export async function getCategoryIdByName({ name }) {
   const { data, error } = await supabase
     .from("category")
-    .select("id")
+    .select("*")
     .eq("name", name); // Assuming name is a valid field
 
   if (error) {
@@ -22,12 +22,12 @@ export async function getCategoryIdByName({ name }) {
     throw new Error("Can't get categories");
   }
 
-  console.log("Fetched category data:", data);
+  console.log("Fetched category data:", data[0]);
 
   if (data.length === 0) {
     console.warn("No category found with name:", name);
     return null; // Or handle it appropriately
   }
 
-  return data[0].id; // Return the first item if expecting a single result
+  return data[0]; // Return the first item if expecting a single result
 }
