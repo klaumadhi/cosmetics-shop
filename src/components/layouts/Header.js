@@ -238,7 +238,13 @@ export default function Header() {
               <div className="px-4 pb-6">
                 {/* <!-- Search Field --> */}
                 <div className="mb-6">
-                  <form onSubmit={() => navigate(`search/${searchTerm}`)}>
+                  <form
+                    onSubmit={(event) => {
+                      event.preventDefault(); // Prevent the page from refreshing
+                      navigate(`search/${searchTerm}`);
+                      setSideBar(false);
+                    }}
+                  >
                     <input
                       type="text"
                       ref={searchInputRef}

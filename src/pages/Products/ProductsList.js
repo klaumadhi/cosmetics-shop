@@ -45,41 +45,37 @@ export default function ProductList() {
   }
 
   return (
-    <div className="my-5">
+    <div className="my-5 ">
       {/* Breadcrumb Navigation */}
-      <nav className="mt-4 mb-12 text-center text-md">
+      <nav className="mt-4 mb-12 text-center ">
         {/* Home icon with link to home */}
         <Link
           to="/"
-          className="inline-flex items-center text-slate-800 hover:underline"
+          className="inline-flex items-center align-middle text-slate-800 hover:underline"
         >
-          <FaHome className="mr-1" /> {/* Home icon */}
+          <FaHome className="mr-1 text-pink-700" /> {/* Home icon */}
           Home
+        </Link>
+        <Link to="/products">
+          <span className="mx-2 mb-2 ">{"»"}</span>
+          <span className="align-middle text-slate-700">Products</span>
         </Link>
         {/* Conditional rendering of category or search term in breadcrumb */}
         {categoryRow?.description && (
           <>
-            <span className="mx-2">{"»"}</span>
-            <span className="text-gray-500">{categoryRow.description}</span>
+            <span className="mx-2 mb-2 ">{"»"}</span>
+            <span className="text-gray-500 align-middle">
+              {categoryRow.description}
+            </span>
           </>
         )}
         {searchTerm && (
           <>
             <span className="mx-2">{"»"}</span>
-            <span className="text-gray-500">{`Search: "${searchTerm}"`}</span>
+            <span className="text-gray-500 align-middle">{`Search for "${searchTerm}"`}</span>
           </>
         )}
       </nav>
-
-      {/* Title for Product Grid */}
-      {/* <h3 className="mb-5 text-xl font-semibold text-center text-slate-800 ">
-        {searchTerm
-          ? `Search for: "${searchTerm}"` // Display search term if available
-          : categoryRow?.description
-          ? `Category of: ${categoryRow.description}` // Display category description
-          : "All Products"}{" "}
-        // Fallback for all products
-      </h3> */}
 
       {/* Display "No Result Found" message if there are no products */}
       {productsToDisplay?.length < 1 && (
