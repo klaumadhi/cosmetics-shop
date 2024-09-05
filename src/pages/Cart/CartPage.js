@@ -14,9 +14,13 @@ import ProductCard from "../Products/ProductCard";
 export default function CartPage() {
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const subtotal = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
   const { products, isLoading, error } = useProducts({}, 6);
+
+  const transportFee = 200;
+  const totalAmount = subtotal > 1500 ? subtotal : subtotal + transportFee;
+  console.log(subtotal);
 
   const settings = {
     dots: true,
@@ -53,7 +57,7 @@ export default function CartPage() {
   return (
     <div className="container max-w-3xl px-6 py-10 mx-auto bg-white rounded-lg shadow-md">
       <h1 className="mb-6 text-3xl font-bold text-gray-800">Your Cart</h1>
-      {cartItems.length === 0 ? (
+      {cartItems?.length === 0 ? (
         <div className="text-center">
           <img
             src={EmptyCart} // Add an appropriate image path
@@ -77,7 +81,7 @@ export default function CartPage() {
               Produktet me te reja
             </h2>
             <div className="container mx-auto overflow-hidden">
-              {products.length > 0 ? (
+              {products?.length > 0 ? (
                 <Slider {...settings}>
                   {products?.map((product) => (
                     <div key={product.id} className="p-2">
@@ -97,22 +101,29 @@ export default function CartPage() {
             {cartItems.map((item) => (
               <li
                 key={item.id}
-                className="flex items-center justify-between p-4 bg-gray-100 rounded-lg"
+                className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm"
               >
-                <div>
-                  <p className="text-lg font-semibold text-gray-800">
-                    {item.name}
-                  </p>
-
-                  <p className="text-gray-600">
-                    {item.quantity} x {item.price} Leke
-                  </p>
-                  {item.variation && (
-                    <p className="text-sm text-gray-500">
-                      {item.variation.type}: {item.variation.value}
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={item?.variation?.variation_image || item.image}
+                    alt={item.name}
+                    className="object-cover w-20 h-20 rounded-md" // Uniform size, cropped if necessary
+                  />
+                  <div>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {item.name}
                     </p>
-                  )}
+                    <p className="text-gray-600">
+                      {item.quantity} x {item.price} Leke
+                    </p>
+                    {item.variation && (
+                      <p className="text-sm text-gray-500">
+                        {item.variation.type}: {item.variation.value}
+                      </p>
+                    )}
+                  </div>
                 </div>
+
                 <Button
                   className="ml-4 text-red-500 hover:text-red-700"
                   onClick={() => dispatch(removeItemFromCart(item.id))}
@@ -122,10 +133,31 @@ export default function CartPage() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center justify-between pt-6 mt-8 border-t">
-            <p className="text-xl font-bold text-gray-800">
-              Total: {totalAmount} Leke
-            </p>
+
+          {/* Subtotal and Transport Fee Section */}
+          <div className="pt-6 mt-8 border-t">
+            <div className="flex items-center justify-between">
+              <p className="text-lg font-bold text-gray-800">Subtotal:</p>
+              <p className="text-lg font-semibold text-gray-700">
+                {subtotal} Leke
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-lg font-bold text-gray-800">Transport Fee:</p>
+              <p className="text-lg font-semibold text-gray-700">
+                {subtotal > 1500 ? "Free" : `${transportFee} Leke`}
+              </p>
+            </div>
+
+            {/* Total Amount */}
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-xl font-bold text-gray-800">Total:</p>
+              <p className="text-xl font-bold text-gray-800">
+                {totalAmount} Leke
+              </p>
+            </div>
+
             <Button
               className="text-white bg-red-500 hover:bg-red-600"
               onClick={() => dispatch(clearCart())}

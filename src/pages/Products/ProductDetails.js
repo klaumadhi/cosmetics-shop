@@ -83,6 +83,7 @@ export default function ProductDetails() {
       price: currentPrice,
       quantity,
       variation: selectedVariation,
+      image: product.image,
     };
 
     dispatch(addItemToCart(item));

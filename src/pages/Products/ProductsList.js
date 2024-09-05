@@ -24,7 +24,7 @@ export default function ProductList() {
   });
 
   // Custom hook to fetch products based on the category ID
-  const { products, isLoading, error } = useProducts(
+  const { products, isLoading, error, isFetching } = useProducts(
     categoryRow?.id
       ? {
           column: "category_id",
@@ -39,8 +39,9 @@ export default function ProductList() {
   // Log the fetched products for debugging
   console.log(products);
 
-  // Display spinner while data is loading
-  if (isLoading || isLoading1 || isLoading2) {
+  // Display spinner while data is loading .... isFetching is a must here so we dont see for a slight
+  // of the second the old products then the spinner and then the new products
+  if (isLoading || isLoading1 || isLoading2 || isFetching) {
     return <Spinner />;
   }
 

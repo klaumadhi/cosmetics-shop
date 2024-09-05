@@ -6,6 +6,7 @@ export default function useProducts({ column, equals } = {}, limit = null) {
     data: products,
     isLoading,
     error,
+    isFetching,
   } = useQuery({
     queryKey: ["products", { column, equals, limit }], // Include column and equals in the queryKey
     queryFn: () => getProducts({ column, equals }, limit), // Pass column and equals to getProducts
@@ -16,5 +17,5 @@ export default function useProducts({ column, equals } = {}, limit = null) {
     console.error("Error in useProducts hook:", error);
   }
 
-  return { products, isLoading, error };
+  return { products, isLoading, error, isFetching };
 }
