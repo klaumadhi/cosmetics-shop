@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import useProducts from "../../hooks/useProducts";
 import ProductCard from "../Products/ProductCard";
@@ -15,12 +15,14 @@ import useCategories from "../../hooks/useCategories";
 // Import Slick Carousel styles
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import useGetWallpapers from "../../hooks/useGetWallpapers";
 
 export default function HomePage() {
   const { products, isLoading, error } = useProducts({}, 6);
   const { categories = [] } = useCategories();
   const navigate = useNavigate();
 
+  const { data: wallpapers, isLoading2, error2 } = useGetWallpapers();
   const carouselSlides = [p1, p2, p3, p4];
 
   // Slider settings for product carousel
@@ -73,13 +75,15 @@ export default function HomePage() {
       {/* Hero Carousel */}
       <div className="overflow-hidden slider-container">
         <Slider {...heroSliderSettings}>
-          {carouselSlides.map((slide, index) => (
-            <img
-              src={slide}
-              key={index}
-              alt={`slide-${index}`}
-              className="object-cover w-full h-96"
-            />
+          {wallpapers?.map((slide, index) => (
+            <Link to={slide.product_link}>
+              <img
+                src={slide.product_image}
+                key={slide.id}
+                alt={`slide-${slide.product_name}`}
+                className="object-cover w-full h-96"
+              />
+            </Link>
           ))}
         </Slider>
       </div>

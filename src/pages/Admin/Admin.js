@@ -25,6 +25,9 @@ export default function Admin() {
       >
         Create Products with different colors
       </Button>
+      <Button className="mx-auto mt-20" onClick={() => navigate("wallpaper")}>
+        Manage Wallpaper
+      </Button>
     </>
   );
 }

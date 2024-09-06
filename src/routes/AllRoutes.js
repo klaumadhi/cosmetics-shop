@@ -9,6 +9,7 @@ import Admin from "../pages/Admin/Admin";
 import CreateProductForm from "../pages/Products/CreateProductForm";
 import CreateProductWithSizesForm from "../pages/Products/CreateProductWithSizesForm";
 import CreateProductWithColorsForm from "../pages/Products/CreateProductWithColorsForm";
+import WallpaperManagementPage from "../wallpaper/WallpaperManagementPage";
 
 export const AllRoutes = () => {
   return (
@@ -25,6 +26,7 @@ export const AllRoutes = () => {
 
         <Route path="admin" element={<Admin />} />
         <Route path="admin/createProduct" element={<CreateProductForm />} />
+
         <Route
           path="admin/CreateProductWithSizesForm"
           element={<CreateProductWithSizesForm />}
@@ -33,6 +35,8 @@ export const AllRoutes = () => {
           path="admin/CreateProductWithColorsForm"
           element={<CreateProductWithColorsForm />}
         />
+
+        <Route path="admin/wallpaper" element={<WallpaperManagementPage />} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>
