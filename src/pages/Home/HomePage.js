@@ -23,7 +23,6 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   const { data: wallpapers, isLoading2, error2 } = useGetWallpapers();
-  const carouselSlides = [p1, p2, p3, p4];
 
   // Slider settings for product carousel
   const productSliderSettings = {
@@ -67,8 +66,8 @@ export default function HomePage() {
     autoplaySpeed: 3000,
   };
 
-  if (isLoading) return <Spinner />;
-  if (error) return <p>Error loading products: {error.message}</p>;
+  if (isLoading || isLoading2) return <Spinner />;
+  if (error || error2) return <p>Error loading products: {error.message}</p>;
 
   return (
     <>
@@ -76,10 +75,9 @@ export default function HomePage() {
       <div className="overflow-hidden slider-container">
         <Slider {...heroSliderSettings}>
           {wallpapers?.map((slide, index) => (
-            <Link to={slide.product_link}>
+            <Link to={slide.product_link} key={slide.id}>
               <img
                 src={slide.product_image}
-                key={slide.id}
                 alt={`slide-${slide.product_name}`}
                 className="object-cover w-full h-96"
               />
