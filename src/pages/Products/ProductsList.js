@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import useProducts from "../../hooks/useProducts.js";
@@ -33,15 +33,30 @@ export default function ProductList() {
       : ""
   );
 
-  // Determine the products to display: filtered by search term or by category
-  const productsToDisplay = searchTerm ? searchProducts : products;
+  // Local state to manage products during transitions
+  const [productsToDisplay, setProductsToDisplay] = useState(null);
 
-  // Log the fetched products for debugging
-  console.log(products);
+  // Effect to reset the displayed products when the category or search term changes
+  useEffect(() => {
+    // Reset products to null or empty array on category or search term change
+    setProductsToDisplay(null);
+  }, [categoryRow, searchTerm]);
 
-  // Display spinner while data is loading .... isFetching is a must here so we dont see for a slight
-  // of the second the old products then the spinner and then the new products
-  if (isLoading || isLoading1 || isLoading2 || isFetching) {
+  // Effect to set products after loading finishes
+  useEffect(() => {
+    if (!isLoading && !isLoading1 && !isLoading2 && !isFetching) {
+      setProductsToDisplay(searchTerm ? searchProducts : products);
+    }
+  }, [products, searchProducts, isLoading, isLoading1, isLoading2, isFetching]);
+
+  // Display spinner while data is loading
+  if (
+    isLoading ||
+    isLoading1 ||
+    isLoading2 ||
+    isFetching ||
+    productsToDisplay === null
+  ) {
     return <Spinner />;
   }
 
@@ -49,7 +64,6 @@ export default function ProductList() {
     <div className="my-5 ">
       {/* Breadcrumb Navigation */}
       <nav className="mt-4 mb-12 text-center ">
-        {/* Home icon with link to home */}
         <Link
           to="/"
           className="inline-flex items-center align-middle text-slate-800 hover:underline"
@@ -61,7 +75,6 @@ export default function ProductList() {
           <span className="mx-2 mb-2 ">{"»"}</span>
           <span className="align-middle text-slate-700">Products</span>
         </Link>
-        {/* Conditional rendering of category or search term in breadcrumb */}
         {categoryRow?.description && (
           <>
             <span className="mx-2 mb-2 ">{"»"}</span>

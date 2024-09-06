@@ -9,6 +9,12 @@ import { addItemToCart } from "../../store/cartSlice.js";
 import Popup from "../../ui/Popup.js";
 import { formatNumber } from "../../utilis/helpers.js";
 import { Link } from "react-router-dom";
+import useSearchProductsByName from "../../hooks/useSearchProductsByName.js";
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import ProductCard from "../Products/ProductCard";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -17,6 +23,16 @@ export default function ProductDetails() {
     column: "id",
     equals: id,
   });
+
+  const product = products?.length > 0 ? products[0] : null;
+  // Fetch similar products based on the product's brand
+  const {
+    searchProducts: similarProducts,
+    isLoadingSimilar,
+    errorSimilar,
+  } = useSearchProductsByName(product?.brand);
+
+  console.log(similarProducts);
 
   const { product_variations, isLoading2, error2 } =
     useGetVariationsFromProductId(id);
@@ -39,11 +55,11 @@ export default function ProductDetails() {
     return <Spinner />;
   }
 
+  console.log(products);
+
   if (error || error2 || !products.length) {
     return <p className="text-center text-red-500">Product not found!</p>;
   }
-
-  const product = products[0];
 
   // Calculate the current price based on the selected variation or product price
   const variationPrice = selectedVariation?.price || product.price;
@@ -88,6 +104,38 @@ export default function ProductDetails() {
 
     dispatch(addItemToCart(item));
     setShowPopup(true);
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5, // Show 5 products at a time
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 1000,
+    autoplaySpeed: 3000,
+
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
   };
 
   return (
@@ -222,6 +270,9 @@ export default function ProductDetails() {
           </div>
 
           {/* Description Section */}
+          <h2 className="my-6 text-xl font-bold text-center font-sans text-gray-900 underline underline-offset-[3px] decoration-1">
+            Description
+          </h2>
           <p className="leading-relaxed text-gray-700 text-md">
             {descriptionToShow}
           </p>
@@ -235,6 +286,28 @@ export default function ProductDetails() {
           )}
         </div>
       </div>
+
+      <div className="mt-10">
+        <h2 className="mb-6 font-sans text-xl font-bold text-center text-gray-900">
+          Similar Products
+        </h2>
+        <div className="container mx-auto overflow-hidden">
+          {console.log("Rendered similarProducts:", similarProducts)}{" "}
+          {/* Debugging Log */}
+          {similarProducts?.length > 1 ? (
+            <Slider {...settings}>
+              {similarProducts.map((product) => (
+                <div key={product.id} className="p-2">
+                  <ProductCard product={product} newProduct={false} />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <p className="text-center">No similar products found.</p>
+          )}
+        </div>
+      </div>
+
       {showPopup && <Popup onClose={() => setShowPopup(false)} />}
     </div>
   );
