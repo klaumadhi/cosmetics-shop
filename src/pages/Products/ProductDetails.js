@@ -15,6 +15,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ProductCard from "../Products/ProductCard";
+import useGetCategoryById from "../../hooks/useGetCategoryById.js";
+import { FaHome } from "react-icons/fa";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -26,6 +28,9 @@ export default function ProductDetails() {
 
   const product = products?.length > 0 ? products[0] : null;
   // Fetch similar products based on the product's brand
+  const { categoryRow, isLoadingCategory, errorCategory } = useGetCategoryById({
+    id: product?.category_id,
+  });
   const {
     searchProducts: similarProducts,
     isLoadingSimilar,
@@ -141,6 +146,34 @@ export default function ProductDetails() {
   return (
     <>
       <div className="container px-4 mx-auto my-10">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6 text-left ">
+          <Link
+            to="/"
+            className="inline-flex items-center align-middle text-slate-800 hover:underline"
+          >
+            <FaHome className="mr-1 text-pink-700" /> {/* Home icon */}
+            Home
+          </Link>
+          <Link to="/products">
+            <span className="mx-2 mb-2 ">{"»"}</span>
+            <span className="align-middle text-slate-700">Products</span>
+          </Link>
+          <Link to={`/products/${categoryRow?.name}`}>
+            <span className="mx-2 mb-2 ">{"»"}</span>
+            <span className="text-gray-700 align-middle">
+              {categoryRow?.description}
+            </span>
+          </Link>
+
+          <span className="mx-2 mb-2 ">{"»"}</span>
+          <div>
+            <span className="overflow-scroll align-middle text-slate-500">
+              {product.name}
+            </span>
+          </div>
+        </nav>
+
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex justify-center">
             <img

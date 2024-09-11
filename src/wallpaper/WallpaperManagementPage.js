@@ -7,6 +7,7 @@ import useDeleteWallpaper from "../hooks/useDeleteWallpaper";
 import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import { toast, Flip } from "react-toastify";
+import { FaExchangeAlt } from "react-icons/fa";
 
 function WallpaperManagementPage() {
   const [editingWallpaper, setEditingWallpaper] = useState(null); // State to track which wallpaper is being edited
@@ -204,29 +205,34 @@ function WallpaperManagementPage() {
               </p>
             )}
             {imagePreview && (
-              <div className="mt-4">
+              <div className="flex items-center justify-center mt-4 ">
                 <img
                   src={imagePreview}
                   alt="Wallpaper Preview"
-                  className="w-full h-32 border rounded-md"
+                  className="w-24 h-24 border rounded-md"
                 />
               </div>
             )}
           </div>
         </div>
 
-        <Button
-          type="submit"
-          className="w-full py-2 mt-6 text-white bg-purple-600 rounded-md hover:bg-purple-700"
-        >
-          {isSubmitting
-            ? editingWallpaper
-              ? "Updating..."
-              : "Creating..."
-            : editingWallpaper
-            ? "Update Wallpaper"
-            : "Create Wallpaper"}
-        </Button>
+        <div className="flex gap-2">
+          <Button type="submit" className="w-full py-2 mt-6">
+            {isSubmitting
+              ? editingWallpaper
+                ? "Updating..."
+                : "Creating..."
+              : editingWallpaper
+              ? "Update Wallpaper"
+              : "Create Wallpaper"}
+          </Button>
+
+          {editingWallpaper && (
+            <Button onClick={resetForm} className="py-2 mt-6 ">
+              <FaExchangeAlt />
+            </Button>
+          )}
+        </div>
       </form>
 
       {/* Display wallpapers list */}
@@ -250,7 +256,7 @@ function WallpaperManagementPage() {
                       {wallpaper.product_name}
                     </h4>
                     <a
-                      href={wallpaper.product_link}
+                      href={wallpaper.product_image}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-blue-500"
