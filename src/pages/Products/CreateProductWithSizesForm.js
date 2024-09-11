@@ -13,14 +13,14 @@ function CreateProductWithSizesForm() {
     control,
     name: "variations",
   });
-  const { isSubmitting } = formState;
+  const { isSubmitting, errors } = formState;
   const { isCreating, createNewProductWithSizes } =
     useCreateProductWithDifferentSize();
   const { categories } = useCategories();
 
   const onSubmit = async (data) => {
     if (!data.image || data.image.length === 0) {
-      console.error("No product image selected");
+      toast.error("Please select a product image.");
       return;
     }
 
@@ -30,38 +30,27 @@ function CreateProductWithSizesForm() {
           !variation.variation_image || variation.variation_image.length === 0
       )
     ) {
-      console.error("Some variation images are not selected");
+      toast.error("Please select images for all variations.");
       return;
     }
 
-    console.log("Form Data:", data);
     try {
       await createNewProductWithSizes(data, {
         onSuccess: () => {
-          console.log("Product created successfully!");
           toast.success("Product created successfully!", {
             position: "top-center",
-            autoClose: 599,
-            hideProgressBar: false,
+            autoClose: 2000,
+            hideProgressBar: true,
             closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
             theme: "dark",
             transition: Flip,
           });
-
-          reset(); // Reset the form after successful submission
+          reset();
         },
-        onError: (error) => {
+        onError: () => {
           toast.error("Failed to create product. Please try again.", {
             position: "top-center",
             autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
             theme: "dark",
             transition: Flip,
           });
@@ -77,43 +66,52 @@ function CreateProductWithSizesForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-full max-w-md mt-5">
-        {/* Product Details */}
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="name">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-2xl p-6 mx-auto space-y-6 bg-white rounded-lg shadow-lg"
+    >
+      {/* Product Details */}
+      <div className="space-y-4">
+        <div>
+          <label className="block font-bold text-gray-700" htmlFor="name">
             Product Name
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="text"
             id="name"
+            placeholder="Enter product name"
             {...register("name", { required: "Product Name is required" })}
           />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="brand">
+        <div>
+          <label className="block font-bold text-gray-700" htmlFor="brand">
             Brand
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="text"
             id="brand"
+            placeholder="Enter brand"
             {...register("brand", { required: "Brand is required" })}
           />
+          {errors.brand && (
+            <p className="text-red-500">{errors.brand.message}</p>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
+        <div>
           <label
-            className="block pr-4 font-bold text-gray-500"
+            className="block font-bold text-gray-700"
             htmlFor="category_id"
           >
             Category
           </label>
           <select
             id="category_id"
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             {...register("category_id", { required: "Category is required" })}
           >
             <option value="">Select a category</option>
@@ -123,161 +121,187 @@ function CreateProductWithSizesForm() {
               </option>
             ))}
           </select>
+          {errors.category_id && (
+            <p className="text-red-500">{errors.category_id.message}</p>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
+        <div>
           <label
-            className="block pr-4 font-bold text-gray-500"
+            className="block font-bold text-gray-700"
             htmlFor="description"
           >
             Description
           </label>
           <textarea
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             id="description"
+            placeholder="Enter product description"
             {...register("description", {
               required: "Description is required",
             })}
           ></textarea>
+          {errors.description && (
+            <p className="text-red-500">{errors.description.message}</p>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="price">
+        <div>
+          <label className="block font-bold text-gray-700" htmlFor="price">
             Price
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="number"
             id="price"
+            placeholder="Enter price"
             {...register("price", { required: "Price is required" })}
           />
+          {errors.price && (
+            <p className="text-red-500">{errors.price.message}</p>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
+        <div>
           <label
-            className="block pr-4 font-bold text-gray-500"
+            className="block font-bold text-gray-700"
             htmlFor="discount_percentage"
           >
             Discount Percentage
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="number"
             id="discount_percentage"
+            placeholder="Enter discount percentage"
             {...register("discount_percentage", {
               required: "Discount Percentage is required",
             })}
           />
+          {errors.discount_percentage && (
+            <p className="text-red-500">{errors.discount_percentage.message}</p>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="image">
+        <div>
+          <label className="block font-bold text-gray-700" htmlFor="image">
             Product Image
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="file"
             id="image"
             {...register("image", { required: "Product Image is required" })}
             accept="image/*"
           />
+          {errors.image && (
+            <p className="text-red-500">{errors.image.message}</p>
+          )}
         </div>
+      </div>
 
-        {/* Variations Section */}
-        <div className="mb-4">
-          <h3 className="mb-2 text-xl font-bold text-gray-700">Variations</h3>
-          {fields.map((field, index) => (
-            <div key={field.id} className="p-4 mb-2 border rounded-md">
-              <div className="flex items-center mb-4">
-                <label
-                  className="block pr-4 font-bold text-gray-500"
-                  htmlFor={`variations[${index}].value`}
-                >
+      {/* Variations Section */}
+      <div>
+        <h3 className="text-xl font-bold text-gray-700">Variations</h3>
+        {fields.map((field, index) => (
+          <div key={field.id} className="p-4 my-4 border rounded-lg">
+            <div className="space-y-2">
+              <div>
+                <label className="block font-bold text-gray-700">
                   Value (ml)
                 </label>
                 <input
-                  className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   type="number"
                   {...register(`variations[${index}].value`, {
                     required: "Value is required",
                   })}
                 />
+                {errors.variations?.[index]?.value && (
+                  <p className="text-red-500">
+                    {errors.variations[index].value.message}
+                  </p>
+                )}
               </div>
 
-              <div className="flex items-center mb-4">
-                <label
-                  className="block pr-4 font-bold text-gray-500"
-                  htmlFor={`variations[${index}].price`}
-                >
-                  Price
-                </label>
+              <div>
+                <label className="block font-bold text-gray-700">Price</label>
                 <input
-                  className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   type="number"
                   {...register(`variations[${index}].price`, {
                     required: "Price is required",
                   })}
                 />
+                {errors.variations?.[index]?.price && (
+                  <p className="text-red-500">
+                    {errors.variations[index].price.message}
+                  </p>
+                )}
               </div>
 
-              <div className="flex items-center mb-4">
-                <label
-                  className="block pr-4 font-bold text-gray-500"
-                  htmlFor={`variations[${index}].barcode`}
-                >
-                  Barcode
-                </label>
+              <div>
+                <label className="block font-bold text-gray-700">Barcode</label>
                 <input
-                  className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   type="text"
                   {...register(`variations[${index}].barcode`, {
                     required: "Barcode is required",
                   })}
                 />
+                {errors.variations?.[index]?.barcode && (
+                  <p className="text-red-500">
+                    {errors.variations[index].barcode.message}
+                  </p>
+                )}
               </div>
 
-              <div className="flex items-center mb-4">
-                <label
-                  className="block pr-4 font-bold text-gray-500"
-                  htmlFor={`variations[${index}].variation_image`}
-                >
+              <div>
+                <label className="block font-bold text-gray-700">
                   Variation Image
                 </label>
                 <input
-                  className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   type="file"
                   {...register(`variations[${index}].variation_image`, {
                     required: "Variation Image is required",
                   })}
                   accept="image/*"
                 />
+                {errors.variations?.[index]?.variation_image && (
+                  <p className="text-red-500">
+                    {errors.variations[index].variation_image.message}
+                  </p>
+                )}
               </div>
 
               <Button
                 type="button"
                 onClick={() => remove(index)}
-                className="text-white bg-red-500"
+                className="w-full text-white bg-red-500"
               >
                 Remove Variation
               </Button>
             </div>
-          ))}
+          </div>
+        ))}
 
-          <Button
-            type="button"
-            onClick={() =>
-              append({ value: "", price: "", barcode: "", variation_image: "" })
-            }
-            className="text-white bg-blue-500"
-          >
-            Add Variation
-          </Button>
-        </div>
+        <Button
+          type="button"
+          onClick={() =>
+            append({ value: "", price: "", barcode: "", variation_image: "" })
+          }
+          className="w-full text-white bg-blue-500"
+        >
+          Add Variation
+        </Button>
+      </div>
 
+      <div className="flex justify-between mt-6">
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="text-white bg-purple-500"
+          className="w-full text-white bg-purple-500"
         >
           {isSubmitting ? "Creating..." : "Create Product"}
         </Button>

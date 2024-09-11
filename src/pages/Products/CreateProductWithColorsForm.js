@@ -42,7 +42,8 @@ function CreateProductWithColorsForm() {
           !variation.color_image ||
           variation.color_image.length === 0 ||
           !variation.variation_image ||
-          variation.variation_image.length === 0
+          variation.variation_image.length === 0 ||
+          !variation.barcode
       )
     ) {
       console.error("Some color or variation images are not selected");
@@ -261,6 +262,32 @@ function CreateProductWithColorsForm() {
               {errors.colorVariations?.[index]?.value && (
                 <span className="text-sm text-red-500">
                   {errors.colorVariations[index].value.message}
+                </span>
+              )}
+            </div>
+            {/* Barcode */}
+            <div className="flex flex-col">
+              <label
+                className="font-bold text-gray-700"
+                htmlFor={`colorVariations[${index}].barcode`}
+              >
+                Barcode
+              </label>
+              <input
+                className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+                  errors.colorVariations?.[index]?.barcode
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+                type="text"
+                id={`colorVariations[${index}].barcode`}
+                {...register(`colorVariations[${index}].barcode`, {
+                  required: "Barcode is required",
+                })}
+              />
+              {errors.colorVariations?.[index]?.barcode && (
+                <span className="text-sm text-red-500">
+                  {errors.colorVariations[index].barcode.message}
                 </span>
               )}
             </div>
