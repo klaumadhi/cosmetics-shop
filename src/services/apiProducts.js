@@ -1,17 +1,18 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function getProducts({ column, equals } = {}, limit = null) {
+export async function getProducts(
+  { column, equals } = {},
+  limit = 16,
+  page = 1
+) {
   let query = supabase
     .from("products")
     .select("*")
     .order("id", { ascending: false })
-    .limit(limit);
+    .limit(limit)
+    .range((page - 1) * limit, page * limit - 1); // Calculate the range (offset based on page)
 
   // Apply the filter only if `column` and `equals` are defined
-  if (column && equals !== undefined) {
-    query = query.eq(column, equals);
-  }
-
   if (column && equals !== undefined) {
     query = query.eq(column, equals);
   }
@@ -23,7 +24,7 @@ export async function getProducts({ column, equals } = {}, limit = null) {
     throw new Error("Can't get products");
   }
 
-  return data; // Return the data to use it elsewhere
+  return data; // Return the data
 }
 
 // API function to create a product

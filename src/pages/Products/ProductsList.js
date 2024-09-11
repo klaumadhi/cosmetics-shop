@@ -7,19 +7,20 @@ import useGetCategoryIdByName from "../../hooks/useGetCategoryIdByName.js";
 import useSearchProductsByName from "../../hooks/useSearchProductsByName.js";
 import NoResultFound from "../NoResultFound.js";
 import { FaHome } from "react-icons/fa"; // Import FontAwesome home icon
+import Button from "../../ui/Button.js";
 
 export default function ProductList() {
   const { category, searchTerm } = useParams(); // Retrieve URL parameters
+  const [page, setPage] = useState(1); // Track the current page
+  const [productsToDisplay, setProductsToDisplay] = useState([]); // Array to store products
+  const [hasMoreProducts, setHasMoreProducts] = useState(true); // Track if more products are available
 
   // Custom hook to search products by name
-  const {
-    searchProducts,
-    isLoading: isLoading2,
-    error: error2,
-  } = useSearchProductsByName(searchTerm);
+  const { searchProducts, isLoading: isLoading2 } =
+    useSearchProductsByName(searchTerm);
 
   // Custom hook to fetch category data by its name
-  const { categoryRow, isLoading1, error1 } = useGetCategoryIdByName({
+  const { categoryRow, isLoading1 } = useGetCategoryIdByName({
     name: category,
   });
 
@@ -30,33 +31,34 @@ export default function ProductList() {
           column: "category_id",
           equals: categoryRow?.id,
         }
-      : ""
+      : "",
+    16, // Limit to 10 products
+    page // Use page state for pagination
   );
 
-  // Local state to manage products during transitions
-  const [productsToDisplay, setProductsToDisplay] = useState(null);
-
-  // Effect to reset the displayed products when the category or search term changes
+  // Effect to reset products when the category or search term changes
   useEffect(() => {
-    // Reset products to null or empty array on category or search term change
-    setProductsToDisplay(null);
+    setProductsToDisplay([]); // Clear displayed products when category or searchTerm changes
+    setPage(1); // Reset page number to 1
+    setHasMoreProducts(true); // Reset the flag to true
   }, [categoryRow, searchTerm]);
 
-  // Effect to set products after loading finishes
+  // Effect to update productsToDisplay when new products are loaded
   useEffect(() => {
     if (!isLoading && !isLoading1 && !isLoading2 && !isFetching) {
-      setProductsToDisplay(searchTerm ? searchProducts : products);
+      const newProducts = searchTerm ? searchProducts : products;
+
+      // If less products than the limit are returned, there are no more products to load
+      if (newProducts.length < 10) {
+        setHasMoreProducts(false);
+      }
+
+      setProductsToDisplay((prev) => [...prev, ...newProducts]); // Append new products
     }
   }, [products, searchProducts, isLoading, isLoading1, isLoading2, isFetching]);
 
-  // Display spinner while data is loading
-  if (
-    isLoading ||
-    isLoading1 ||
-    isLoading2 ||
-    isFetching ||
-    productsToDisplay === null
-  ) {
+  // Display spinner while loading
+  if (isLoading || isLoading1 || isLoading2 || isFetching) {
     return <Spinner />;
   }
 
@@ -92,16 +94,28 @@ export default function ProductList() {
       </nav>
 
       {/* Display "No Result Found" message if there are no products */}
-      {productsToDisplay?.length < 1 && (
+      {productsToDisplay.length < 1 && (
         <NoResultFound searchTerm={searchTerm} />
       )}
 
       {/* Grid for displaying product cards */}
       <div className="grid gap-6 mx-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-        {productsToDisplay?.map((product) => (
+        {productsToDisplay.map((product) => (
           <ProductCard product={product} key={product.id} />
         ))}
       </div>
+
+      {/* Load More Button */}
+      {hasMoreProducts && (
+        <div className="mt-5 text-center">
+          <Button
+            onClick={() => setPage((prevPage) => prevPage + 1)}
+            className="px-4 my-5 rounded-md"
+          >
+            Load More
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
