@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import Spinner from "../../ui/Spinner";
 import Button from "../../ui/Button";
@@ -8,19 +8,31 @@ import { toast, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function CreateProductWithColorsForm() {
-  const { register, handleSubmit, control, formState, reset } = useForm();
+  const { register, handleSubmit, control, formState, reset, setError } =
+    useForm();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "colorVariations",
   });
-  const { isSubmitting } = formState;
+  const { isSubmitting, errors } = formState;
   const { isCreating, createNewProductWithColors } =
     useCreateProductWithDifferentColors();
   const { categories } = useCategories();
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const onSubmit = async (data) => {
     if (!data.image || data.image.length === 0) {
-      console.error("No product image selected");
+      setError("image", {
+        type: "manual",
+        message: "Product image is required",
+      });
       return;
     }
 
@@ -53,8 +65,8 @@ function CreateProductWithColorsForm() {
             theme: "dark",
             transition: Flip,
           });
-
           reset(); // Reset the form after successful submission
+          setImagePreview(null); // Reset image preview
         },
         onError: (error) => {
           toast.error("Failed to create product. Please try again.", {
@@ -78,43 +90,62 @@ function CreateProductWithColorsForm() {
   if (isCreating) return <Spinner />;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-full max-w-md mt-5">
-        {/* Product Details */}
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="name">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-2xl p-6 mx-auto space-y-6 bg-white rounded-lg shadow-lg"
+    >
+      <h2 className="text-2xl font-bold text-center text-purple-900">
+        Create Product with Colors
+      </h2>
+
+      {/* Product Details */}
+      <div className="space-y-4">
+        {/* Product Name */}
+        <div className="flex flex-col">
+          <label className="font-bold text-gray-700" htmlFor="name">
             Product Name
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+              errors.name ? "border-red-500" : "border-gray-300"
+            }`}
             type="text"
             id="name"
             {...register("name", { required: "Product Name is required" })}
           />
+          {errors.name && (
+            <span className="text-sm text-red-500">{errors.name.message}</span>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="brand">
+        {/* Brand */}
+        <div className="flex flex-col">
+          <label className="font-bold text-gray-700" htmlFor="brand">
             Brand
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+              errors.brand ? "border-red-500" : "border-gray-300"
+            }`}
             type="text"
             id="brand"
             {...register("brand", { required: "Brand is required" })}
           />
+          {errors.brand && (
+            <span className="text-sm text-red-500">{errors.brand.message}</span>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label
-            className="block pr-4 font-bold text-gray-500"
-            htmlFor="category_id"
-          >
+        {/* Category */}
+        <div className="flex flex-col">
+          <label className="font-bold text-gray-700" htmlFor="category_id">
             Category
           </label>
           <select
+            className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+              errors.category_id ? "border-red-500" : "border-gray-300"
+            }`}
             id="category_id"
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
             {...register("category_id", { required: "Category is required" })}
           >
             <option value="">Select a category</option>
@@ -124,155 +155,171 @@ function CreateProductWithColorsForm() {
               </option>
             ))}
           </select>
+          {errors.category_id && (
+            <span className="text-sm text-red-500">
+              {errors.category_id.message}
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label
-            className="block pr-4 font-bold text-gray-500"
-            htmlFor="description"
-          >
+        {/* Description */}
+        <div className="flex flex-col">
+          <label className="font-bold text-gray-700" htmlFor="description">
             Description
           </label>
           <textarea
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+              errors.description ? "border-red-500" : "border-gray-300"
+            }`}
             id="description"
             {...register("description", {
               required: "Description is required",
             })}
           ></textarea>
+          {errors.description && (
+            <span className="text-sm text-red-500">
+              {errors.description.message}
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="price">
+        {/* Price */}
+        <div className="flex flex-col">
+          <label className="font-bold text-gray-700" htmlFor="price">
             Price
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+              errors.price ? "border-red-500" : "border-gray-300"
+            }`}
             type="number"
             id="price"
             {...register("price", { required: "Price is required" })}
           />
+          {errors.price && (
+            <span className="text-sm text-red-500">{errors.price.message}</span>
+          )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <label
-            className="block pr-4 font-bold text-gray-500"
-            htmlFor="discount_percentage"
-          >
-            Discount Percentage
-          </label>
-          <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
-            type="number"
-            id="discount_percentage"
-            {...register("discount_percentage")}
-          />
-        </div>
-
-        <div className="flex items-center mb-4">
-          <label className="block pr-4 font-bold text-gray-500" htmlFor="image">
+        {/* Product Image */}
+        <div className="flex flex-col">
+          <label className="font-bold text-gray-700" htmlFor="image">
             Product Image
           </label>
           <input
-            className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+            className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+              errors.image ? "border-red-500" : "border-gray-300"
+            }`}
             type="file"
             id="image"
             {...register("image", { required: "Product image is required" })}
+            onChange={handleImageChange}
           />
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Product Preview"
+              className="h-40 mt-2"
+            />
+          )}
+          {errors.image && (
+            <span className="text-sm text-red-500">{errors.image.message}</span>
+          )}
         </div>
+      </div>
 
-        {/* Color Variations */}
-        <h3 className="mb-2 text-lg font-bold">Color Variations</h3>
-        {fields.map((item, index) => (
-          <div
-            key={item.id}
-            className="p-4 mb-6 border border-gray-300 rounded"
-          >
-            <div className="flex items-center mb-4">
+      {/* Color Variations */}
+      <h3 className="mb-4 text-xl font-bold text-purple-900">
+        Color Variations
+      </h3>
+      {fields.map((item, index) => (
+        <div
+          key={item.id}
+          className="p-4 mb-4 border rounded-lg shadow-sm bg-gray-50"
+        >
+          <div className="space-y-4">
+            {/* Color Name */}
+            <div className="flex flex-col">
               <label
-                className="block pr-4 font-bold text-gray-500"
+                className="font-bold text-gray-700"
                 htmlFor={`colorVariations[${index}].value`}
               >
                 Color Name
               </label>
               <input
-                className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+                  errors.colorVariations?.[index]?.value
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
                 type="text"
                 id={`colorVariations[${index}].value`}
                 {...register(`colorVariations[${index}].value`, {
                   required: "Color Name is required",
                 })}
               />
+              {errors.colorVariations?.[index]?.value && (
+                <span className="text-sm text-red-500">
+                  {errors.colorVariations[index].value.message}
+                </span>
+              )}
             </div>
 
-            <div className="flex items-center mb-4">
+            {/* Color Image */}
+            <div className="flex flex-col">
               <label
-                className="block pr-4 font-bold text-gray-500"
+                className="font-bold text-gray-700"
                 htmlFor={`colorVariations[${index}].color_image`}
               >
                 Color Image
               </label>
               <input
-                className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+                  errors.colorVariations?.[index]?.color_image
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
                 type="file"
                 id={`colorVariations[${index}].color_image`}
                 {...register(`colorVariations[${index}].color_image`, {
                   required: "Color Image is required",
                 })}
               />
+              {errors.colorVariations?.[index]?.color_image && (
+                <span className="text-sm text-red-500">
+                  {errors.colorVariations[index].color_image.message}
+                </span>
+              )}
             </div>
 
-            <div className="flex items-center mb-4">
+            {/* Variation Image */}
+            <div className="flex flex-col">
               <label
-                className="block pr-4 font-bold text-gray-500"
+                className="font-bold text-gray-700"
                 htmlFor={`colorVariations[${index}].variation_image`}
               >
                 Variation Image
               </label>
               <input
-                className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
+                className={`w-full px-4 py-2 mt-1 border-2 rounded focus:outline-none ${
+                  errors.colorVariations?.[index]?.variation_image
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
                 type="file"
                 id={`colorVariations[${index}].variation_image`}
                 {...register(`colorVariations[${index}].variation_image`, {
                   required: "Variation Image is required",
                 })}
               />
+              {errors.colorVariations?.[index]?.variation_image && (
+                <span className="text-sm text-red-500">
+                  {errors.colorVariations[index].variation_image.message}
+                </span>
+              )}
             </div>
 
-            <div className="flex items-center mb-4">
-              <label
-                className="block pr-4 font-bold text-gray-500"
-                htmlFor={`colorVariations[${index}].price`}
-              >
-                Price
-              </label>
-              <input
-                className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
-                type="number"
-                id={`colorVariations[${index}].price`}
-                {...register(`colorVariations[${index}].price`, {
-                  required: "Price is required",
-                })}
-              />
-            </div>
-
-            <div className="flex items-center mb-4">
-              <label
-                className="block pr-4 font-bold text-gray-500"
-                htmlFor={`colorVariations[${index}].barcode`}
-              >
-                Barcode
-              </label>
-              <input
-                className="w-full px-4 py-2 bg-gray-200 border-2 rounded"
-                type="text"
-                id={`colorVariations[${index}].barcode`}
-                {...register(`colorVariations[${index}].barcode`, {
-                  required: "Barcode is required",
-                })}
-              />
-            </div>
-
+            {/* Remove Button */}
             <Button
               type="button"
               variant="danger"
@@ -281,22 +328,23 @@ function CreateProductWithColorsForm() {
               Remove Color Variation
             </Button>
           </div>
-        ))}
-        <div className="gap-4">
-          <Button
-            className="mx-6 bg-purple-900"
-            type="button"
-            variant="secondary"
-            onClick={() => append({})}
-          >
-            Add Color Variation
-          </Button>
-
-          <Button type="submit" variant="primary" disabled={isSubmitting}>
-            {isCreating ? "Waiting to Create" : "Create Product"}
-          </Button>
         </div>
-      </div>
+      ))}
+
+      {/* Add Color Variation Button */}
+      <Button
+        className="mx-6 bg-purple-900"
+        type="button"
+        variant="secondary"
+        onClick={() => append({})}
+      >
+        Add Color Variation
+      </Button>
+
+      {/* Submit Button */}
+      <Button type="submit" variant="primary" disabled={isSubmitting}>
+        {isCreating ? "Waiting to Create" : "Create Product"}
+      </Button>
     </form>
   );
 }

@@ -145,9 +145,9 @@ export default function ProductDetails() {
 
   return (
     <>
-      <div className="container px-4 mx-auto my-10">
+      <div className="container px-1 mx-auto mt-5">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-6 text-left ">
+        <nav className="mb-10 text-left ">
           <Link
             to="/"
             className="inline-flex items-center align-middle text-slate-800 hover:underline"
