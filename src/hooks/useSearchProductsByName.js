@@ -6,6 +6,7 @@ export default function useSearchProductsByName(name) {
     data: searchProducts,
     isLoading,
     error,
+    isFetching,
   } = useQuery({
     queryKey: ["searchName", name],
     queryFn: () => searchProductsByName(name), // Pass 'name' directly
@@ -22,5 +23,5 @@ export default function useSearchProductsByName(name) {
     // You can add a toast or alert here to notify the user
   }
 
-  return { searchProducts, isLoading, error };
+  return { searchProducts, isLoading, error, isFetching };
 }

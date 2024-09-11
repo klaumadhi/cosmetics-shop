@@ -6,6 +6,7 @@ export default function useGetCategoryIdByName({ name }) {
     data: categoryRow,
     isLoading,
     error,
+    isFetching,
   } = useQuery({
     queryKey: ["categoryRow", name],
     queryFn: () => getCategoryIdByName({ name }),
@@ -22,5 +23,5 @@ export default function useGetCategoryIdByName({ name }) {
     // You can add a toast or alert here to notify the user
   }
 
-  return { categoryRow, isLoading, error };
+  return { categoryRow, isLoading, error, isFetching };
 }

@@ -111,6 +111,9 @@ export default function ProductDetails() {
     setShowPopup(true);
   };
 
+  const isOutOfStock =
+    selectedVariation?.stock_quantity === 0 || product.stock_quantity === 0;
+
   const settings = {
     dots: true,
     infinite: true,
@@ -298,8 +301,14 @@ export default function ProductDetails() {
                   +
                 </button>
               </div>
-              <Button className="" onClick={handleAddToCart}>
-                Add {quantity} to Cart
+              <Button
+                className={`${
+                  isOutOfStock ? "bg-gray-400 hover:bg-gray-400" : ""
+                }`}
+                onClick={handleAddToCart}
+                disabled={isOutOfStock}
+              >
+                {isOutOfStock ? "Out of Stock" : `Add ${quantity} to Cart`}
               </Button>
             </div>
 

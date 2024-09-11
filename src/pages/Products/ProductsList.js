@@ -16,11 +16,18 @@ export default function ProductList() {
   const [hasMoreProducts, setHasMoreProducts] = useState(true); // Track if more products are available
 
   // Custom hook to search products by name
-  const { searchProducts, isLoading: isLoading2 } =
-    useSearchProductsByName(searchTerm);
+  const {
+    searchProducts,
+    isLoading: isLoading2,
+    isFetching: isFetchingSearch,
+  } = useSearchProductsByName(searchTerm);
 
   // Custom hook to fetch category data by its name
-  const { categoryRow, isLoading1 } = useGetCategoryIdByName({
+  const {
+    categoryRow,
+    isLoading1,
+    isFetching: isFetchingCat,
+  } = useGetCategoryIdByName({
     name: category,
   });
 
@@ -58,7 +65,14 @@ export default function ProductList() {
   }, [products, searchProducts, isLoading, isLoading1, isLoading2, isFetching]);
 
   // Display spinner while loading
-  if (isLoading || isLoading1 || isLoading2 || isFetching) {
+  if (
+    isLoading ||
+    isLoading1 ||
+    isLoading2 ||
+    isFetching ||
+    isFetchingCat ||
+    isFetchingSearch
+  ) {
     return <Spinner />;
   }
 
@@ -92,20 +106,18 @@ export default function ProductList() {
           </>
         )}
       </nav>
-
       {/* Display "No Result Found" message if there are no products */}
       {productsToDisplay.length < 1 && (
         <NoResultFound searchTerm={searchTerm} />
       )}
-
       {/* Grid for displaying product cards */}
       <div className="grid gap-6 mx-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {productsToDisplay.map((product) => (
           <ProductCard product={product} key={product.id} />
         ))}
       </div>
-
       {/* Load More Button */}
+
       {hasMoreProducts && (
         <div className="mt-5 text-center">
           <Button
