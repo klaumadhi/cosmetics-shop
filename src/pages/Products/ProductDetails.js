@@ -49,12 +49,16 @@ export default function ProductDetails() {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  // Update the selected variation when product variations change
+  // Reset the state when the product ID changes
   useEffect(() => {
     if (product_variations?.length > 0) {
-      setSelectedVariation(product_variations[0]);
+      setSelectedVariation(product_variations[0]); // Set the first variation by default
+    } else {
+      setSelectedVariation(null); // Reset variation if no variations exist
     }
-  }, [product_variations]);
+    setQuantity(1); // Reset quantity to 1 when product changes
+    setShowFullDescription(false); // Reset description visibility
+  }, [product, product_variations, id]);
 
   if (isLoading || isLoading2) {
     return <Spinner />;
