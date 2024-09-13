@@ -164,6 +164,7 @@ export async function createProductWithDifferentSize(productData) {
           variation_image: variationImagePath,
           barcode: variation.barcode,
           price: variation.price,
+          stock_quantity: variation.stock_quantity,
           color_image: variation.color_image || null, // Only if you are using color variations
         });
 
@@ -313,6 +314,141 @@ export async function createProductWithDifferentColors(productData) {
     return productInsertData;
   } catch (error) {
     console.error("Error during product creation:", error);
+    throw error;
+  }
+}
+
+export async function deleteProductById(productId) {
+  const { error: variationError } = await supabase
+    .from("productVariations")
+    .delete()
+    .eq("product_id", productId);
+
+  if (variationError) {
+    throw new Error(
+      "Error deleting product variations: " + variationError.message
+    );
+  }
+
+  const { error: productError } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", productId);
+
+  if (productError) {
+    throw new Error("Error deleting product: " + productError.message);
+  }
+}
+
+export async function updateProduct(productId, productData, variations) {
+  const bucketName = "products_image";
+
+  try {
+    let productImagePath = productData.image;
+
+    // Handle product image upload if a new file is provided
+    if (productData.image instanceof File) {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const productImageName = `${productId}-${uniqueSuffix}`;
+
+      const { error: productImageError } = await supabase.storage
+        .from(bucketName)
+        .upload(productImageName, productData.image, {
+          contentType: productData.image.type,
+        });
+
+      if (productImageError) {
+        throw new Error(
+          "Error uploading product image: " + productImageError.message
+        );
+      }
+
+      // Update the product image path
+      productImagePath = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${productImageName}`;
+    }
+
+    // Update product details
+    const { error: productError } = await supabase
+      .from("products")
+      .update({
+        name: productData.name,
+        brand: productData.brand,
+        description: productData.description,
+        price: productData.price,
+        stock_quantity: productData.stock_quantity,
+        discount_percentage: productData.discount_percentage,
+        image: productImagePath,
+      })
+      .eq("id", productId);
+
+    if (productError) {
+      throw new Error("Error updating product: " + productError.message);
+    }
+
+    // Update product variations
+    for (const variation of variations) {
+      let variationImagePath = variation.variation_image;
+      let colorImagePath = variation.color_image; // New color image path handling
+
+      // Handle variation image upload if a new file is provided
+      if (variation.variation_image instanceof File) {
+        const variationImageName = `${productId}-variation-${Date.now()}`;
+
+        const { error: variationImageError } = await supabase.storage
+          .from(bucketName)
+          .upload(variationImageName, variation.variation_image, {
+            contentType: variation.variation_image.type,
+          });
+
+        if (variationImageError) {
+          throw new Error(
+            "Error uploading variation image: " + variationImageError.message
+          );
+        }
+
+        // Update the variation image path
+        variationImagePath = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${variationImageName}`;
+      }
+
+      // Handle color image upload if a new file is provided and variation type is "color"
+      if (variation.type === "color" && variation.color_image instanceof File) {
+        const colorImageName = `${productId}-color-${Date.now()}`;
+
+        const { error: colorImageError } = await supabase.storage
+          .from(bucketName)
+          .upload(colorImageName, variation.color_image, {
+            contentType: variation.color_image.type,
+          });
+
+        if (colorImageError) {
+          throw new Error(
+            "Error uploading color image: " + colorImageError.message
+          );
+        }
+
+        // Update the color image path
+        colorImagePath = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${colorImageName}`;
+      }
+
+      // Update the variation with both variation_image and color_image paths
+      const { error: variationError } = await supabase
+        .from("productVariations")
+        .update({
+          value: variation.value,
+          variation_image: variationImagePath,
+          barcode: variation.barcode,
+          price: variation.price,
+          stock_quantity: variation.stock_quantity,
+          color_image: variation.type === "color" ? colorImagePath : null, // Ensure color_image is only set for "color" type
+        })
+        .eq("id", variation.id);
+
+      if (variationError) {
+        throw new Error("Error updating variation: " + variationError.message);
+      }
+    }
+  } catch (error) {
+    console.error("Error updating product:", error);
     throw error;
   }
 }

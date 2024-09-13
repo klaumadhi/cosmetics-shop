@@ -31,6 +31,12 @@ export default function Admin() {
           >
             Create Products with Different Colors
           </Button>
+          <Button className="w-full" onClick={() => navigate("editProducts")}>
+            Edit Products
+          </Button>
+          <Button className="w-full" onClick={() => navigate("deleteProducts")}>
+            Delete Products
+          </Button>
           <Button className="w-full" onClick={() => navigate("wallpaper")}>
             Manage Wallpaper
           </Button>

@@ -11,6 +11,9 @@ import CreateProductWithSizesForm from "../pages/Products/CreateProductWithSizes
 import CreateProductWithColorsForm from "../pages/Products/CreateProductWithColorsForm";
 import WallpaperManagementPage from "../wallpaper/WallpaperManagementPage";
 
+import DeleteProducts from "../pages/Products/DeleteProducts";
+import EditProducts from "../pages/Products/EditProducts";
+
 export const AllRoutes = () => {
   return (
     <>
@@ -26,6 +29,8 @@ export const AllRoutes = () => {
 
         <Route path="admin" element={<Admin />} />
         <Route path="admin/createProduct" element={<CreateProductForm />} />
+        <Route path="admin/deleteProducts" element={<DeleteProducts />} />
+        <Route path="admin/editProducts" element={<EditProducts />} />
 
         <Route
           path="admin/CreateProductWithSizesForm"

@@ -257,6 +257,22 @@ function CreateProductWithSizesForm() {
               </div>
 
               <div>
+                <label className="block font-bold text-gray-700">Stock</label>
+                <input
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  type="text"
+                  {...register(`variations[${index}].stock_quantity`, {
+                    required: "Stock is required",
+                  })}
+                />
+                {errors.variations?.[index]?.barcode && (
+                  <p className="text-red-500">
+                    {errors.variations[index].stock_quantity.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
                 <label className="block font-bold text-gray-700">
                   Variation Image
                 </label>
