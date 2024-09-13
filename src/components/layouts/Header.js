@@ -299,7 +299,9 @@ export default function Header() {
                       className="flex items-center py-3 pl-3 pr-4 rounded text-gray-50 hover:bg-gray-600"
                       to="/admin"
                     >
-                      <span className="select-none">Upload Products</span>
+                      <span className="text-red-600 uppercase select-none">
+                        Admin Panel
+                      </span>
                     </Link>
                   </li>
                 </ul>
