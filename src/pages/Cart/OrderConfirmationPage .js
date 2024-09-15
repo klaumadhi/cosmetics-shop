@@ -84,10 +84,18 @@ export default function OrderConfirmationPage() {
             </li>
           ))}
         </ul>
+        {subtotal < 1500 && (
+          <div className="flex justify-between mt-8 text-sm text-gray-500 p ">
+            <span>Transport:</span>
+            <span>200 Leke</span>
+          </div>
+        )}
 
-        <div className="flex justify-between pt-4 mt-8 text-xl font-bold text-gray-900 border-t">
+        <div className="flex justify-between pt-4 text-xl font-bold text-gray-900 border-t">
           <span>Total Amount:</span>
-          <span>{formatNumber(subtotal)} Leke</span>
+          <span>
+            {subtotal > 1500 ? formatNumber(subtotal) : subtotal + 200} Leke
+          </span>
         </div>
       </div>
 

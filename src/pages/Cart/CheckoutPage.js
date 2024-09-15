@@ -41,7 +41,10 @@ export default function CheckoutPage() {
         total: item.totalPrice,
         barcode: item.variation ? item.variation.barcode : item.barcode,
       })),
-      subtotal: subtotal,
+      subtotal:
+        subtotal > 1500
+          ? subtotal
+          : `${subtotal + 200} Leke (${subtotal}+200 Transport)`,
     };
 
     console.log(buyerEmailData);
