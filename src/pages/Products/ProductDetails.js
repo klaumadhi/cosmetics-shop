@@ -109,6 +109,7 @@ export default function ProductDetails() {
       quantity,
       variation: selectedVariation,
       image: product.image,
+      barcode: selectedVariation ? null : product.barcode,
     };
 
     dispatch(addItemToCart(item));
@@ -230,7 +231,7 @@ export default function ProductDetails() {
                   <div>
                     <div className="flex gap-4 my-5">
                       <p className="my-auto font-semibold text-gray-700 text-md">
-                        Ngjyra:
+                        Color:
                       </p>
                       <div className="flex inline gap-2 my-auto">
                         {product_variations?.map((variation) => (
@@ -251,7 +252,7 @@ export default function ProductDetails() {
                       </div>
                     </div>
                     <p className="font-semibold text-gray-700 text-md">
-                      Nuanca: {"    "}
+                      Color Name: {"    "}
                       <span className="font-bold uppercase">
                         {selectedVariation?.value}
                       </span>

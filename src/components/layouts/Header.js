@@ -258,7 +258,7 @@ export default function Header() {
                 </div>
                 <h3 className="mb-2 text-xs font-medium text-gray-500 uppercase">
                   <Link onClick={() => setSideBar(false)} to="products">
-                    Produktet
+                    Categorys
                   </Link>
                 </h3>
                 <ul className="mb-8 text-sm font-medium">
@@ -281,7 +281,7 @@ export default function Header() {
               </div>
               <div className="px-4 pb-6">
                 <h3 className="mb-2 text-xs font-medium text-gray-500 uppercase">
-                  Kontakt
+                  Contacts
                 </h3>
                 <ul className="mb-8 text-sm font-medium">
                   <li>

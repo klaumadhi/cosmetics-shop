@@ -69,7 +69,7 @@ export default function Footer() {
         <div className="pt-6 border-t border-gray-700 sm:flex sm:items-center sm:justify-between">
           {/* Copyright */}
           <span className="block text-sm text-gray-400 sm:text-right">
-            © 2023 Diva Cosmetics. All Rights Reserved.
+            © {new Date().getFullYear()} Diva Cosmetics. All Rights Reserved.
           </span>
         </div>
       </div>

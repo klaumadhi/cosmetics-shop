@@ -16,41 +16,23 @@ export default function CartPage() {
   const cartItems = useSelector((state) => state.cart.items);
   const subtotal = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
-  const { products, isLoading, error } = useProducts({}, 6);
+  const { products } = useProducts({}, 6);
 
   const transportFee = 200;
   const totalAmount = subtotal > 1500 ? subtotal : subtotal + transportFee;
-  console.log(subtotal);
 
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
-    slidesToShow: 5, // Show 5 products at a time
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
     speed: 1000,
     autoplaySpeed: 3000,
-
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
+      { breakpoint: 1024, settings: { slidesToShow: 4 } },
+      { breakpoint: 768, settings: { slidesToShow: 3 } },
+      { breakpoint: 480, settings: { slidesToShow: 2 } },
     ],
   };
 
@@ -60,7 +42,7 @@ export default function CartPage() {
       {cartItems?.length === 0 ? (
         <div className="text-center">
           <img
-            src={EmptyCart} // Add an appropriate image path
+            src={EmptyCart}
             alt="Empty Cart"
             className="w-40 h-40 mx-auto mb-6"
           />
@@ -70,15 +52,12 @@ export default function CartPage() {
           <p className="mb-8 text-gray-500">
             Looks like you haven't added anything to your cart yet.
           </p>
-          <Button
-            className="px-6 py-3 "
-            onClick={() => navigate("/products")} // Adjust the URL to your shop page
-          >
+          <Button onClick={() => navigate("/products")}>
             Continue Shopping
           </Button>
           <div className="mt-10">
             <h2 className="mb-4 text-xl font-bold text-gray-800">
-              Produktet me te reja
+              Newest Products
             </h2>
             <div className="container mx-auto overflow-hidden">
               {products?.length > 0 ? (
@@ -107,7 +86,7 @@ export default function CartPage() {
                   <img
                     src={item?.variation?.variation_image || item.image}
                     alt={item.name}
-                    className="object-cover w-20 h-20 rounded-md" // Uniform size, cropped if necessary
+                    className="object-cover w-20 h-20 rounded-md"
                   />
                   <div>
                     <p className="text-lg font-semibold text-gray-800">
@@ -135,7 +114,7 @@ export default function CartPage() {
           </ul>
 
           {/* Subtotal and Transport Fee Section */}
-          <div className="pt-6 mt-8 border-t">
+          <div className="pt-6 mt-8 border-t ">
             <div className="flex items-center justify-between">
               <p className="text-lg font-bold text-gray-800">Subtotal:</p>
               <p className="text-lg font-semibold text-gray-700">
@@ -150,7 +129,6 @@ export default function CartPage() {
               </p>
             </div>
 
-            {/* Total Amount */}
             <div className="flex items-center justify-between mt-4">
               <p className="text-xl font-bold text-gray-800">Total:</p>
               <p className="text-xl font-bold text-gray-800">
@@ -158,12 +136,22 @@ export default function CartPage() {
               </p>
             </div>
 
-            <Button
-              className="text-white bg-red-500 hover:bg-red-600"
-              onClick={() => dispatch(clearCart())}
-            >
-              Clear Cart
-            </Button>
+            <div className="flex justify-between">
+              <Button
+                className="mt-5 text-white bg-red-500 hover:bg-red-600"
+                onClick={() => dispatch(clearCart())}
+              >
+                Clear Cart
+              </Button>
+
+              {/* Checkout Button */}
+              <Button
+                className="inset-y-0 right-0 mt-5 ml-4 text-white bg-green-500 hover:bg-green-600"
+                onClick={() => navigate("checkout")}
+              >
+                Checkout
+              </Button>
+            </div>
           </div>
         </>
       )}

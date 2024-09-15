@@ -13,6 +13,8 @@ import WallpaperManagementPage from "../wallpaper/WallpaperManagementPage";
 
 import DeleteProducts from "../pages/Products/DeleteProducts";
 import EditProducts from "../pages/Products/EditProducts";
+import CheckoutPage from "../pages/Cart/CheckoutPage";
+import OrderConfirmationPage from "../pages/Cart/OrderConfirmationPage ";
 
 export const AllRoutes = () => {
   return (
@@ -26,6 +28,8 @@ export const AllRoutes = () => {
         <Route path="product/:id" element={<ProductDetails />} />
 
         <Route path="cart" element={<CartPage />} />
+        <Route path="cart/checkout" element={<CheckoutPage />} />
+        <Route path="order-confirmation" element={<OrderConfirmationPage />} />
 
         <Route path="admin" element={<Admin />} />
         <Route path="admin/createProduct" element={<CreateProductForm />} />
