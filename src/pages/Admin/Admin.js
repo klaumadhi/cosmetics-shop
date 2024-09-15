@@ -1,9 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
+import { logoutAdmin } from "../../services/apiAdmin";
 
 export default function Admin() {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutAdmin();
+    navigate("/login");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-100">
@@ -40,6 +46,8 @@ export default function Admin() {
           <Button className="w-full" onClick={() => navigate("wallpaper")}>
             Manage Wallpaper
           </Button>
+
+          <Button onClick={handleLogout}>Logout</Button>
         </div>
       </div>
     </div>
