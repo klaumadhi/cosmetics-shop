@@ -59,22 +59,25 @@ export default function Header() {
                 </Link>
               </li>
               <li className="relative group">
-                <Link className="hover:text-gray-200" to="/products">
-                  Category
-                </Link>
-                <ul className="absolute left-0 w-48 mt-2 text-white transition-opacity duration-300 bg-gray-800 opacity-0 group-hover:opacity-100">
-                  {categories?.data?.map((category) => (
-                    <li key={category.id}>
-                      <Link
-                        className="block px-4 py-2 hover:bg-gray-700"
-                        to={`/products/${category.name}`}
-                      >
-                        {category.description}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                <div className="inline-block">
+                  <Link className="hover:text-gray-200" to="/products">
+                    Category
+                  </Link>
+                  <ul className="absolute left-0 invisible w-48 mt-2 text-white transition-opacity duration-300 bg-gray-800 opacity-0 group-hover:opacity-100 group-hover:visible">
+                    {categories?.data?.map((category) => (
+                      <li key={category.id}>
+                        <Link
+                          className="block px-4 py-2 hover:bg-gray-700"
+                          to={`/products/${category.name}`}
+                        >
+                          {category.description}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </li>
+
               <li>
                 <a className="hover:text-gray-200" href="#">
                   Collections
@@ -292,17 +295,6 @@ export default function Header() {
                     >
                       <span className="select-none">Instagram</span>
                     </a>
-                  </li>
-                  <li>
-                    <Link
-                      onClick={() => setSideBar(!sideBar)}
-                      className="flex items-center py-3 pl-3 pr-4 rounded text-gray-50 hover:bg-gray-600"
-                      to="/admin"
-                    >
-                      <span className="text-red-600 uppercase select-none">
-                        Admin Panel
-                      </span>
-                    </Link>
                   </li>
                 </ul>
               </div>

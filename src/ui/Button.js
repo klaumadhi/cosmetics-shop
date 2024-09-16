@@ -13,9 +13,9 @@ const Button = React.forwardRef(
     ref
   ) => {
     const baseClass =
-      "bg-pink-700 text-white font-bold py-2 px-4 border-b-4 border-pink-950 rounded transition-transform transform active:scale-95";
+      "bg-pink-500 text-white font-bold py-2 px-4 border-b-4 border-pink-600 rounded transition-transform transform active:scale-95";
 
-    const hoverClass = "hover:bg-pink-800 hover:border-pink-900";
+    const hoverClass = "hover:bg-pink-600 hover:border-pink-700";
     const disabledClass = "opacity-50 cursor-not-allowed";
 
     return (

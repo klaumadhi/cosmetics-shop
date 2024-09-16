@@ -209,7 +209,7 @@ export default function ProductDetails() {
                     <p className="font-semibold text-gray-700 text-md">
                       Select Size:
                     </p>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex flex-wrap gap-2 mt-2">
                       {product_variations.map((variation) => (
                         <button
                           key={variation.id}

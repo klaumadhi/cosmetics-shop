@@ -136,7 +136,7 @@ export default function HomePage() {
       </div>
 
       {/* Latest Products Section */}
-      <section className="my-10">
+      <section className="pb-6 my-10">
         <h2 className="my-5 text-2xl font-semibold text-center">
           New Arrivals
         </h2>

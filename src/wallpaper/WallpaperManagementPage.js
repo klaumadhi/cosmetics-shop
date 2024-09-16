@@ -23,25 +23,28 @@ function WallpaperManagementPage() {
   const onSubmit = async (data) => {
     if (editingWallpaper) {
       // Editing existing wallpaper
-      updateWallpaper(editingWallpaper.id, data, {
-        onSuccess: () => {
-          toast.success("Wallpaper updated successfully!", {
-            position: "top-center",
-            autoClose: 600,
-            theme: "dark",
-            transition: Flip,
-          });
-          resetForm();
-        },
-        onError: () => {
-          toast.error("Failed to update wallpaper.", {
-            position: "top-center",
-            autoClose: 5000,
-            theme: "dark",
-            transition: Flip,
-          });
-        },
-      });
+      updateWallpaper(
+        { id: editingWallpaper.id, updatedWallpaper: data }, // Pass both id and data in an object
+        {
+          onSuccess: () => {
+            toast.success("Wallpaper updated successfully!", {
+              position: "top-center",
+              autoClose: 600,
+              theme: "dark",
+              transition: Flip,
+            });
+            resetForm(); // Clear form and reset state after successful edit
+          },
+          onError: () => {
+            toast.error("Failed to update wallpaper.", {
+              position: "top-center",
+              autoClose: 5000,
+              theme: "dark",
+              transition: Flip,
+            });
+          },
+        }
+      );
     } else {
       // Creating new wallpaper
       createNewWallpaper(data, {
@@ -52,7 +55,7 @@ function WallpaperManagementPage() {
             theme: "dark",
             transition: Flip,
           });
-          resetForm();
+          resetForm(); // Clear form and reset state after successful creation
         },
         onError: () => {
           toast.error("Failed to create wallpaper.", {
@@ -96,9 +99,13 @@ function WallpaperManagementPage() {
   };
 
   const resetForm = () => {
-    reset(); // Reset form fields
-    setEditingWallpaper(null); // Stop editing mode
-    setImagePreview(null); // Reset image preview
+    reset({
+      product_name: "", // Clear wallpaper name
+      product_link: "", // Clear wallpaper link
+      image: null, // Clear image field
+    });
+    setEditingWallpaper(null); // Exit editing mode
+    setImagePreview(null); // Clear image preview
   };
 
   const watchImage = watch("image");

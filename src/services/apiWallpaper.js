@@ -35,7 +35,6 @@ export async function createWallpaper(newWallpaper) {
     });
 
   if (uploadError) {
-    console.error("Error uploading image:", uploadError);
     throw new Error("Error uploading image");
   }
 
@@ -61,9 +60,41 @@ export async function createWallpaper(newWallpaper) {
 
 // Edit a wallpaper
 export async function editWallpaper(id, updatedWallpaper) {
+  let imagePath = updatedWallpaper.product_image; // Default to the existing image path
+
+  // Check if a new image is uploaded
+  if (updatedWallpaper.image && updatedWallpaper.image.length > 0) {
+    const imageFile = updatedWallpaper.image[0]; // New image file
+
+    const imageName = new Date().getTime().toString(); // Unique name (timestamp)
+    const bucketName = "wallpapers_image"; // Supabase storage bucket name
+
+    // Upload new image to Supabase storage
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(imageName, imageFile, {
+        contentType: imageFile.type,
+      });
+
+    if (uploadError) {
+      throw new Error("Error uploading image");
+    }
+
+    // Get the new image URL after upload
+    imagePath = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${imageName}`;
+  }
+
+  // Prepare the updated data, using the new or existing image path
+  const updatedData = {
+    product_name: updatedWallpaper.product_name,
+    product_link: updatedWallpaper.product_link,
+    product_image: imagePath, // Use the new image or the existing one
+  };
+
+  // Perform the update operation
   const { data, error } = await supabase
     .from("wallpapers")
-    .update(updatedWallpaper)
+    .update(updatedData)
     .eq("id", id);
 
   if (error) {
