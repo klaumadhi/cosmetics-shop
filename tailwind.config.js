@@ -18,6 +18,11 @@ module.exports = {
 
       "2xl": "1536px",
     },
+    extend: {
+      fontFamily: {
+        sans: ["Gotu", "sans-serif"], // Override the default sans font
+      },
+    },
   },
   plugins: [],
 };
