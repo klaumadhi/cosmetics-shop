@@ -86,7 +86,7 @@ export default function HomePage() {
         </Slider>
       </div>
 
-      {/* Welcome Section */}
+      {/* Welcome Section
       <section className="my-10">
         <div className="flex items-center justify-center mx-5 bg-white rounded-lg shadow-md">
           <div className="w-full max-w-lg px-8 py-12 text-center transition-all duration-300 transform rounded-lg hover:scale-105">
@@ -107,6 +107,24 @@ export default function HomePage() {
               Explore our newest collection and special offers!
             </p>
           </div>
+        </div>
+      </section> */}
+
+      {/* Latest Products Section */}
+      <section className="pb-6 mt-2 mb-8">
+        <h2 className="my-5 text-3xl font-bold text-center">New Arrivals</h2>
+        <div className="mx-auto overflow-hidden ">
+          {products.length > 0 ? (
+            <Slider {...productSliderSettings}>
+              {products.map((product) => (
+                <div key={product.id} className="p-3">
+                  <ProductCard product={product} newProduct={true} />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <p className="text-center">No products found.</p>
+          )}
         </div>
       </section>
 
@@ -134,26 +152,6 @@ export default function HomePage() {
           </Button>
         </div>
       </div>
-
-      {/* Latest Products Section */}
-      <section className="pb-6 my-10">
-        <h2 className="my-5 text-2xl font-semibold text-center">
-          New Arrivals
-        </h2>
-        <div className="container mx-auto overflow-hidden">
-          {products.length > 0 ? (
-            <Slider {...productSliderSettings}>
-              {products.map((product) => (
-                <div key={product.id} className="p-2">
-                  <ProductCard product={product} newProduct={true} />
-                </div>
-              ))}
-            </Slider>
-          ) : (
-            <p className="text-center">No products found.</p>
-          )}
-        </div>
-      </section>
 
       {/* Categories Section */}
       <section className="py-16 bg-gray-100">
