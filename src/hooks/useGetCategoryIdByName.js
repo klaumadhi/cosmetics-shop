@@ -15,7 +15,7 @@ export default function useGetCategoryIdByName({ name }) {
     refetchOnWindowFocus: false, // Disable refetch on window focus by default
   });
 
-  console.log(categoryRow);
+  // console.log(categoryRow);
 
   // Optionally, display error in a user-friendly way
   if (error) {

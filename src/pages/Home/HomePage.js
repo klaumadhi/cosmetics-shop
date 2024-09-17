@@ -112,7 +112,7 @@ export default function HomePage() {
 
       {/* Latest Products Section */}
       <section className="pb-6 mt-2 mb-8">
-        <h2 className="my-5 text-3xl font-bold text-center">New Arrivals</h2>
+        <h2 className="my-6 text-3xl font-bold text-center">New Arrivals</h2>
         <div className="mx-auto overflow-hidden ">
           {products.length > 0 ? (
             <Slider {...productSliderSettings}>

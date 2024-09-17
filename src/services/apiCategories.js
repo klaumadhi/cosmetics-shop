@@ -22,7 +22,7 @@ export async function getCategoryIdByName({ name }) {
     throw new Error("Can't get categories");
   }
 
-  console.log("Fetched category data:", data[0]);
+  // console.log("Fetched category data:", data[0]);
 
   if (data.length === 0) {
     console.warn("No category found with name:", name);
@@ -42,8 +42,6 @@ export async function getCategoryById({ id }) {
     console.error("Error fetching category by ID:", error);
     throw new Error("Can't get category by ID");
   }
-
-  console.log("Fetched category data:", data[0]);
 
   if (data.length === 0) {
     console.warn("No category found with id:", id);

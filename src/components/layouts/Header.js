@@ -37,7 +37,6 @@ export default function Header() {
     navigate("/cart"); // Navigate to the cart page
   };
 
-  console.log(searchTerm);
   const { categories, error, isLoading } = useCategories();
 
   return (

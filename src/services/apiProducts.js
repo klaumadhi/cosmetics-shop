@@ -452,3 +452,28 @@ export async function updateProduct(productId, productData, variations) {
     throw error;
   }
 }
+
+// API function to get products by category ID with a limit of 10 items
+export async function getProductsByCategoryId(categoryId, page = 1) {
+  const limit = 10; // Set the limit to 10 items
+
+  // Build the query
+  let query = supabase
+    .from("products")
+    .select("*")
+    .eq("category_id", categoryId) // Filter by category ID
+    .order("id", { ascending: false }) // Order by ID in descending order
+    .limit(limit) // Limit to 10 items
+    .range((page - 1) * limit, page * limit - 1); // Paginate the results
+
+  const { data, error } = await query;
+
+  // Handle any errors that might occur during the query
+  if (error) {
+    console.error("Error fetching products by category:", error);
+    throw new Error("Can't get products for the specified category");
+  }
+
+  // Return the fetched data
+  return data;
+}

@@ -17,6 +17,7 @@ import "slick-carousel/slick/slick-theme.css";
 import ProductCard from "../Products/ProductCard";
 import useGetCategoryById from "../../hooks/useGetCategoryById.js";
 import { FaHome } from "react-icons/fa";
+import useGetProductsByCategoryId from "../../hooks/useGetProductsByCategoryId.js";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -32,14 +33,26 @@ export default function ProductDetails() {
     id: product?.category_id,
   });
   const {
-    searchProducts: similarProducts,
+    searchProducts: brandProducts,
     isLoadingSimilar,
     errorSimilar,
   } = useSearchProductsByName(product?.brand);
 
-  console.log(similarProducts);
+  const {
+    products: categoryProducts,
+    isLoadingC,
+    errorC,
+    isFetching,
+  } = useGetProductsByCategoryId(product?.category_id);
 
-  const { product_variations, isLoading2, error2 } =
+  // console.log(brandProducts, categoryProducts);
+
+  const similarProducts =
+    brandProducts?.length < 1 ? brandProducts : categoryProducts;
+
+  // console.log(similarProducts);
+
+  const { product_variations, isLoading2, error2, isFetching2 } =
     useGetVariationsFromProductId(id);
 
   const [selectedVariation, setSelectedVariation] = useState(
@@ -49,7 +62,6 @@ export default function ProductDetails() {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  // Reset the state when the product ID changes
   useEffect(() => {
     if (product_variations?.length > 0) {
       setSelectedVariation(product_variations[0]); // Set the first variation by default
@@ -60,11 +72,18 @@ export default function ProductDetails() {
     setShowFullDescription(false); // Reset description visibility
   }, [product, product_variations, id]);
 
-  if (isLoading || isLoading2) {
+  if (
+    isLoading ||
+    isLoading2 ||
+    isLoadingCategory ||
+    isLoadingSimilar ||
+    isFetching ||
+    isFetching2
+  ) {
     return <Spinner />;
   }
 
-  console.log(products);
+  // console.log(products);
 
   if (error || error2 || !products.length) {
     return <p className="text-center text-red-500">Product not found!</p>;
@@ -342,7 +361,7 @@ export default function ProductDetails() {
           Similar Products
         </h2>
         <div className="container mx-auto overflow-hidden">
-          {console.log("Rendered similarProducts:", similarProducts)}{" "}
+          {/* {console.log("Rendered similarProducts:", similarProducts)}{" "} */}
           {/* Debugging Log */}
           {similarProducts?.length > 1 ? (
             <Slider {...settings}>
