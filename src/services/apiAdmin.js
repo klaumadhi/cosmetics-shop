@@ -1,34 +1,40 @@
 import supabase from "./supabase";
-import bcrypt from "bcryptjs";
 
 // Login API
-export async function loginAdmin({ username, password }) {
-  const { data, error } = await supabase
-    .from("admins")
-    .select("*")
-    .eq("username", username)
-    .single();
-
-  if (error || !data) {
-    throw new Error("Invalid credentials");
+export async function loginAdmin({ email, password }) {
+  let { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
   }
 
-  const isValidPassword = password === data.password;
-  if (!isValidPassword) {
-    throw new Error("Invalid password");
-  }
-
-  // Store login session locally (e.g., in localStorage)
-  localStorage.setItem("adminSession", JSON.stringify(data));
   return data;
 }
 
-// Logout API
-export function logoutAdmin() {
-  localStorage.removeItem("adminSession");
+export async function getCurrentUser() {
+  const { data: session } = await supabase.auth.getSession();
+  if (!session.session) return null;
+
+  const { data, error } = await supabase.auth.getUser();
+
+  console.log(data);
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  return data?.user;
 }
 
-// Check if Admin is logged in
-export function isAdminLoggedIn() {
-  return !!localStorage.getItem("adminSession");
+export async function logout() {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
 }

@@ -22,6 +22,15 @@ module.exports = {
       fontFamily: {
         sans: ["Gotu", "sans-serif"], // Override the default sans font
       },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+      },
+      animation: {
+        fadeIn: "fadeIn 3s ease-in-out",
+      },
     },
   },
   plugins: [],

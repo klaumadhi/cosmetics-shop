@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-import { loginAdmin } from "../../services/apiAdmin";
-import { useNavigate } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
+import Spinner from "../../ui/Spinner";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const { login, isLoading } = useLogin();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      await loginAdmin({ username, password });
-      navigate("/admin"); // Redirect to admin dashboard on success
+      login({ email, password });
     } catch (err) {
       setError(err.message);
     }
@@ -30,15 +29,16 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Username
+                Email
               </label>
               <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-50"
-                placeholder="Enter your username"
+                placeholder="Enter your email"
+                disabled={isLoading}
               />
             </div>
 
@@ -53,6 +53,7 @@ export default function LoginPage() {
                 required
                 className="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-50"
                 placeholder="Enter your password"
+                disabled={isLoading}
               />
             </div>
 
@@ -60,7 +61,7 @@ export default function LoginPage() {
               type="submit"
               className="w-full px-4 py-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Login
+              {!isLoading ? "Login" : <Spinner />}
             </button>
           </form>
 

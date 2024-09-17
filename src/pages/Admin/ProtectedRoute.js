@@ -1,11 +1,24 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { isAdminLoggedIn } from "../../services/apiAdmin";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
+import Spinner from "../../ui/Spinner";
 
 export default function ProtectedRoute({ element }) {
-  if (!isAdminLoggedIn()) {
-    return <Navigate to="/login" replace />;
-  }
+  //1. Load the auth user
+  const { isLoading, isAuthenticated } = useUser();
+  const navigate = useNavigate();
 
-  return element;
+  //If is no authenticated user redirect to login
+  useEffect(
+    function () {
+      if (!isAuthenticated && !isLoading) {
+        navigate("/login", { replace: true });
+      }
+    },
+    [isAuthenticated, isLoading]
+  );
+
+  if (isLoading) <Spinner />;
+
+  if (isAuthenticated) return element;
 }

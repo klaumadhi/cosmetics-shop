@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "../services/apiProducts";
 
 export default function useProducts(
@@ -6,6 +6,8 @@ export default function useProducts(
   limit = 16,
   page = 1
 ) {
+  const queryClient = useQueryClient();
+
   const {
     data: products,
     isLoading,

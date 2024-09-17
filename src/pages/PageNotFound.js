@@ -4,22 +4,30 @@ import { useTitle } from "../hooks/useTitle";
 
 export const PageNotFound = () => {
   useTitle("Page Not Found");
+
   return (
-    <main>
-      <section className="flex flex-col justify-center px-2">
-        <div className="flex flex-col items-center my-4">
-          <p className="text-7xl text-gray-700 font-bold my-10 dark:text-white text-center">
-            404, Oops!
-          </p>
-          <div className="max-w-xs">
-            <img className="" src={Logo} alt="Page not found" />
-          </div>
+    <main className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-gray-900">
+      <section className="flex flex-col items-center justify-center px-4 py-12 space-y-8 animate-fadeIn">
+        {/* Error Message */}
+        <p className="text-6xl font-extrabold text-gray-800 shadow-lg dark:text-white shadow-gray-300 dark:shadow-none">
+          404, Oops!
+        </p>
+
+        {/* Logo */}
+        <div className="w-48 h-48 md:w-64 md:h-64">
+          <img
+            className="object-cover w-full h-full rounded-lg shadow-lg"
+            src={Logo}
+            alt="Page not found"
+          />
         </div>
-        <div className="flex justify-center my-4">
+
+        {/* Back to Home Button */}
+        <div className="mt-6">
           <Link to="/">
             <button
               type="button"
-              className="w-64 text-2xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded-lg px-5 py-2.5 text-center mr-2 mb-2"
+              className="inline-flex items-center px-6 py-3 text-lg font-medium text-white transition-transform transform rounded-full shadow-lg bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-4 focus:ring-pink-300 dark:focus:ring-pink-800"
             >
               Back To Home
             </button>

@@ -2,13 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import { logoutAdmin } from "../../services/apiAdmin";
+import useLogout from "../../hooks/useLogout";
 
 export default function Admin() {
+  const { logout, isLoading } = useLogout();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logoutAdmin();
-    navigate("/login");
+    logout();
   };
 
   return (
