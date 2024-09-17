@@ -38,6 +38,7 @@ export default function ProductCard({ product, newProduct = false }) {
             className="aspect-square w-fill"
             src={image}
             alt="Product Image"
+            loading="lazy"
           />
         </div>
         <div className="p-2">

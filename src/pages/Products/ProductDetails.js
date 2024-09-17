@@ -20,6 +20,8 @@ import { FaHome } from "react-icons/fa";
 import useGetProductsByCategoryId from "../../hooks/useGetProductsByCategoryId.js";
 
 export default function ProductDetails() {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
   const dispatch = useDispatch();
   const { id } = useParams();
   const { products, isLoading, error } = useProducts({
@@ -70,6 +72,12 @@ export default function ProductDetails() {
     }
     setQuantity(1); // Reset quantity to 1 when product changes
     setShowFullDescription(false); // Reset description visibility
+    if (product_variations && product_variations.length > 0) {
+      product_variations.forEach((variation) => {
+        const img = new Image();
+        img.src = variation.variation_image;
+      });
+    }
   }, [product, product_variations, id]);
 
   if (
@@ -99,6 +107,11 @@ export default function ProductDetails() {
 
   const handleVariationClick = (variation) => {
     setSelectedVariation(variation);
+    setIsImageLoading(true); // Show spinner when a new variation is selected
+  };
+
+  const handleImageLoad = () => {
+    setIsImageLoading(false); // Hide spinner once image is loaded
   };
 
   const handleQuantityChange = (increment) => {
@@ -203,10 +216,15 @@ export default function ProductDetails() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex justify-center">
+            {isImageLoading && <Spinner />}{" "}
+            {/* Show spinner while image loads */}
             <img
               src={selectedVariation?.variation_image || product.image}
               alt={product.name}
-              className="rounded-lg shadow-lg object-cover max-h-[500px]"
+              className={`rounded-lg shadow-lg object-cover max-h-[500px] ${
+                isImageLoading ? "hidden" : "block"
+              }`}
+              onLoad={handleImageLoad}
             />
           </div>
           <div className="flex flex-col justify-center">

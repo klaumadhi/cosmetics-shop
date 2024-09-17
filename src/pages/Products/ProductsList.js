@@ -66,10 +66,10 @@ export default function ProductList() {
 
   // Display spinner while loading
   if (
-    isLoading ||
+    (isLoading && page === 1) ||
     isLoading1 ||
     isLoading2 ||
-    isFetching ||
+    (isFetching && page === 1) ||
     isFetchingCat ||
     isFetchingSearch
   ) {
@@ -118,15 +118,22 @@ export default function ProductList() {
       </div>
       {/* Load More Button */}
 
-      {hasMoreProducts && (
-        <div className="mt-5 text-center">
-          <Button
-            onClick={() => setPage((prevPage) => prevPage + 1)}
-            className="px-4 my-5 rounded-md"
-          >
-            Load More
-          </Button>
-        </div>
+      {isFetching && page > 1 ? (
+        <Spinner />
+      ) : (
+        <>
+          {/* Pagination */}
+          {hasMoreProducts && (
+            <div className="mt-5 text-center">
+              <Button
+                onClick={() => setPage((prevPage) => prevPage + 1)}
+                className="px-4 my-5 rounded-md"
+              >
+                Load More
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
