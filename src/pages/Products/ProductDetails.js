@@ -270,7 +270,7 @@ export default function ProductDetails() {
                       <p className="my-auto font-semibold text-gray-700 text-md">
                         Color:
                       </p>
-                      <div className="flex inline gap-2 my-auto">
+                      <div className="flex gap-2 my-auto">
                         {product_variations?.map((variation) => (
                           <button
                             key={variation.id}
