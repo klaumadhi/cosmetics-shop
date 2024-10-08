@@ -62,7 +62,7 @@ export default function Header() {
                   <Link className="hover:text-gray-200" to="/products">
                     Category
                   </Link>
-                  <ul className="absolute left-0 invisible w-48 mt-2 text-white transition-opacity duration-300 bg-gray-800 opacity-0 group-hover:opacity-100 group-hover:visible">
+                  <ul className="absolute left-0 invisible w-48 pt-2 text-white transition-opacity duration-300 bg-gray-800 opacity-0 group-hover:opacity-100 group-hover:visible">
                     {categories?.data?.map((category) => (
                       <li key={category.id}>
                         <Link
@@ -78,12 +78,16 @@ export default function Header() {
               </li>
 
               <li>
-                <a className="hover:text-gray-200" href="#">
+                <Link className="hover:text-gray-200" to="products">
                   Collections
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-gray-200" href="#">
+                <a
+                  className="hover:text-gray-200"
+                  href="https://www.instagram.com/diva_cos/"
+                  target="_blank"
+                >
                   Contact Us
                 </a>
               </li>

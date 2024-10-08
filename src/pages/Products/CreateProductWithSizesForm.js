@@ -19,6 +19,9 @@ function CreateProductWithSizesForm() {
   const { categories } = useCategories();
 
   const onSubmit = async (data) => {
+    // Set discount_percentage to 0 if it's not provided
+    data.discount_percentage = data.discount_percentage || 0;
+
     if (!data.image || data.image.length === 0) {
       toast.error("Please select a product image.");
       return;
@@ -173,13 +176,24 @@ function CreateProductWithSizesForm() {
             className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="number"
             id="discount_percentage"
-            placeholder="Enter discount percentage"
-            {...register("discount_percentage", {
-              required: "Discount Percentage is required",
-            })}
+            placeholder="Enter discount percentage (optional)"
+            {...register("discount_percentage")}
           />
-          {errors.discount_percentage && (
-            <p className="text-red-500">{errors.discount_percentage.message}</p>
+        </div>
+
+        <div>
+          <label className="block font-bold text-gray-700" htmlFor="stock">
+            Stock Quantity
+          </label>
+          <input
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            type="number"
+            id="stock"
+            placeholder="Enter stock quantity"
+            {...register("stock_quantity", { required: "Stock is required" })}
+          />
+          {errors.stock_quantity && (
+            <p className="text-red-500">{errors.stock_quantity.message}</p>
           )}
         </div>
 
@@ -260,12 +274,12 @@ function CreateProductWithSizesForm() {
                 <label className="block font-bold text-gray-700">Stock</label>
                 <input
                   className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  type="text"
+                  type="number"
                   {...register(`variations[${index}].stock_quantity`, {
                     required: "Stock is required",
                   })}
                 />
-                {errors.variations?.[index]?.barcode && (
+                {errors.variations?.[index]?.stock_quantity && (
                   <p className="text-red-500">
                     {errors.variations[index].stock_quantity.message}
                   </p>

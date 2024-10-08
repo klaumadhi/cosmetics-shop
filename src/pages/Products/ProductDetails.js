@@ -187,12 +187,12 @@ export default function ProductDetails() {
     <>
       <div className="container px-1 mx-auto mt-5">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-10 text-left ">
+        <nav className="justify-center mb-10 text-left ">
           <Link
             to="/"
-            className="inline-flex items-center align-middle text-slate-800 hover:underline"
+            className="inline-flex items-center align-middle sm: text-slate-800 hover:underline"
           >
-            <FaHome className="mr-1 text-pink-700" /> {/* Home icon */}
+            <FaHome className="mr-1 text-pink-700 " /> {/* Home icon */}
             Home
           </Link>
           <Link to="/products">
@@ -208,7 +208,7 @@ export default function ProductDetails() {
 
           <span className="mx-2 mb-2 ">{"»"}</span>
           <div>
-            <span className="overflow-scroll align-middle text-slate-500">
+            <span className="overflow-scroll align-middle sm:text-2xl text-slate-500">
               {product.name}
             </span>
           </div>

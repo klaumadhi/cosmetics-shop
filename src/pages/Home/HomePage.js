@@ -5,10 +5,6 @@ import useProducts from "../../hooks/useProducts";
 import ProductCard from "../Products/ProductCard";
 import Button from "../../ui/Button";
 import Spinner from "../../ui/Spinner";
-import p1 from "../../assets/carousel/p1.jpg";
-import p2 from "../../assets/carousel/p2.jpg";
-import p3 from "../../assets/carousel/p3.jpg";
-import p4 from "../../assets/carousel/p4.jpg";
 import DivaInside from "../../assets/images/diva-inside.jpg";
 import useCategories from "../../hooks/useCategories";
 
@@ -60,10 +56,30 @@ export default function HomePage() {
     dots: true,
     infinite: true,
     speed: 1000,
-    slidesToShow: 1,
+    slidesToShow: 3, // Show 4 slides on large screens
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1024, // Tablets and smaller screens
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 768, // Mobile devices in landscape mode
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 480, // Small mobile devices in portrait mode
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   if (isLoading || isLoading2) return <Spinner />;

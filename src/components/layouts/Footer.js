@@ -21,7 +21,7 @@ export default function Footer() {
 
           {/* Footer Navigation Links */}
           <ul className="flex flex-wrap items-center mb-6 text-sm text-gray-400 sm:mb-0">
-            <li>
+            {/* <li>
               <a href="#" className="hover:text-white me-4 md:me-6">
                 About Us
               </a>
@@ -35,9 +35,13 @@ export default function Footer() {
               <a href="#" className="hover:text-white me-4 md:me-6">
                 FAQ
               </a>
-            </li>
+            </li> */}
             <li>
-              <a href="#" className="hover:text-white">
+              <a
+                href="https://www.instagram.com/diva_cos/"
+                target="_blank"
+                className="hover:text-white"
+              >
                 Contact
               </a>
             </li>
@@ -49,17 +53,19 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Social Media Links */}
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white">
+              <a
+                href="https://www.facebook.com/divadurres/"
+                target="_blank"
+                className="text-gray-400 hover:text-white"
+              >
                 <FaFacebook size={24} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white">
+              <a
+                href="https://www.instagram.com/diva_cos/"
+                target="_blank"
+                className="text-gray-400 hover:text-white"
+              >
                 <FaInstagram size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white">
-                <FaTwitter size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white">
-                <FaPinterest size={24} />
               </a>
             </div>
           </div>
